@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security Utility - Administrator Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #2c3e50;
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover {
+            background: #34495e;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        section {
+            margin-bottom: 50px;
+        }
+        
+        h2 {
+            color: #1e3c72;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #2a5298;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #34495e;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .error-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+        }
+        
+        .code-block .comment {
+            color: #6a9955;
+        }
+        
+        .code-block .prompt {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .menu-display {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+        
+        .menu-title {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+        
+        .menu-section {
+            color: #dcdcaa;
+            margin-top: 15px;
+        }
+        
+        .menu-option {
+            color: #d4d4d4;
+            padding-left: 20px;
+        }
+        
+        .menu-highlight {
+            color: #4ec9b0;
+        }
+        
+        .menu-warning {
+            color: #ce9178;
+        }
+        
+        .menu-success {
+            color: #6a9955;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .back-to-top {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .back-to-top:hover {
+            background: #5568d3;
+        }
+        
+        .workflow-diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .workflow-step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            padding: 15px 25px;
+            margin: 5px;
+            font-weight: 600;
+        }
+        
+        .workflow-arrow {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .badge-local {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .badge-enterprise {
+            background: #9c27b0;
+            color: white;
+        }
+        
+        .badge-required {
+            background: #f44336;
+            color: white;
+        }
+        
+        .badge-optional {
+            background: #4caf50;
+            color: white;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header id="top">
+            <h1>🛡️ Network Security Utility</h1>
+            <p>Administrator Guide v2.0</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Complete Guide for IPsec Configuration and Management</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#quickstart">⚡ Quick Start (60 Seconds)</a></li>
+                <li><a href="#safety-first">⚠️ SAFETY FIRST - Backup Before Deployment</a></li>
+                <li><a href="#overview">📖 Overview & Key Features</a></li>
+                <li><a href="#requirements">⚙️ System Requirements & Prerequisites</a></li>
+                <li><a href="#getting-started">🚀 Getting Started & Setup</a></li>
+                <li><a href="#best-practices">✅ Configuration Validation (Critical)</a></li>
+                <li><a href="#workflows">🔄 Common Workflows & Production Deployment</a></li>
+                <li><a href="#partial-config">🔧 Partial Config Support (Advanced)</a></li>
+                <li><a href="#local-mode">🖥️ LOCAL Mode (Standalone Servers)</a></li>
+                <li><a href="#enterprise-mode">🏢 ENTERPRISE Mode (GPO/AD)</a></li>
+                <li><a href="#troubleshooting">🔧 Troubleshooting & Diagnostics</a></li>
+                <li><a href="#examples">💻 Advanced Examples</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content">
+            <!-- QUICK START SECTION -->
+            <section id="quickstart">
+                <h2>⚡ Quick Start (60 Seconds)</h2>
+                
+                <p><strong>New to this utility?</strong> Get running in 4 simple steps:</p>
+                
+                <div class="success-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 8px; margin: 20px 0;">
+                    <ol style="font-size: 1.1em; line-height: 2; margin-left: 20px;">
+                        <li><strong>Download Files:</strong> Get <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">Config.xml</code>, <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">Network-Security-Utility.ps1</code>, and <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">Validate-Config.ps1</code></li>
+                        <li><strong>Edit Config.xml:</strong> Fill in your domain/IPsec settings (or use partial config for testing)</li>
+                        <li><strong>Validate:</strong> Run <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">.\Validate-Config.ps1 -ConfigFile ".\Config.xml"</code></li>
+                        <li><strong>Deploy:</strong> Run <code style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px;">.\Network-Security-Utility.ps1</code> → Choose <strong>Option 11 (LOCAL)</strong> or <strong>Option 13 (ENTERPRISE)</strong></li>
+                    </ol>
+                </div>
+                
+                <table style="margin-top: 20px;">
+                    <tr>
+                        <th>I Want To...</th>
+                        <th>Go To Section</th>
+                        <th>Menu Option</th>
+                    </tr>
+                    <tr>
+                        <td>Configure a single server</td>
+                        <td><a href="#local-mode">LOCAL Mode</a></td>
+                        <td><span class="badge badge-local">Option 11</span></td>
+                    </tr>
+                    <tr>
+                        <td>Deploy to many servers via GPO</td>
+                        <td><a href="#enterprise-mode">ENTERPRISE Mode</a></td>
+                        <td><span class="badge badge-enterprise">Option 13</span></td>
+                    </tr>
+                    <tr>
+                        <td>Test partial/incomplete configs</td>
+                        <td><a href="#partial-config">Partial Config Support</a></td>
+                        <td><span class="badge badge-optional">Options 7-10</span></td>
+                    </tr>
+                    <tr>
+                        <td>Troubleshoot IPsec issues</td>
+                        <td><a href="#troubleshooting">Troubleshooting</a></td>
+                        <td><span class="badge badge-required">Options 17-19</span></td>
+                    </tr>
+                </table>
+                
+                <div class="warning-box" style="margin-top: 20px;">
+                    <h4>⚠️ Before You Start</h4>
+                    <ul>
+                        <li>✅ <strong>Run PowerShell as Administrator</strong></li>
+                        <li>✅ <strong>Set Execution Policy:</strong> <code>Set-ExecutionPolicy RemoteSigned</code></li>
+                        <li>✅ <strong>For ENTERPRISE mode:</strong> Install GroupPolicy module (<code>Install-WindowsFeature GPMC</code>)</li>
+                    </ul>
+                </div>
+                
+                <div class="error-box" style="margin-top: 20px; border-left-color: #ff6b6b;">
+                    <h4>🛡️ NEW ADMINISTRATORS: Read Safety First Section!</h4>
+                    <p><strong>👉 <a href="#safety-first" style="color: #c92a2a; font-weight: bold;">Go to SAFETY FIRST - Backup Workflow</a></strong></p>
+                    <p>Learn the critical <strong>BACKUP → DEPLOY → RESTORE</strong> workflow before your first deployment. Skipping backup is the #1 mistake new administrators make!</p>
+                </div>
+                
+                <p style="text-align: center; margin-top: 30px; font-size: 1.1em;">
+                    👉 <strong>Need more details?</strong> Continue reading below for comprehensive documentation →
+                </p>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- SAFETY FIRST SECTION -->
+            <section id="safety-first" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); padding: 40px; border-radius: 12px; margin: 40px 0; box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);">
+                <div style="background: white; padding: 30px; border-radius: 8px;">
+                    <h2 style="color: #ff6b6b; margin-top: 0;">⚠️ SAFETY FIRST - READ BEFORE DEPLOYMENT</h2>
+                    
+                    <div class="error-box" style="border-left-color: #ff6b6b; background-color: #fff5f5;">
+                        <h3 style="color: #c92a2a; margin-top: 0;">🛡️ ALWAYS BACKUP BEFORE ANY IPsec DEPLOYMENT</h3>
+                        <p style="font-size: 1.15em; line-height: 1.8;"><strong>IPsec changes can impact server connectivity.</strong> If misconfigured, you may lose network access to the server. A backup ensures you can quickly recover.</p>
+                    </div>
+                    
+                    <h3 style="color: #e03131;">The Golden Rule for New Administrators:</h3>
+                    <div style="background: #fff9db; border-left: 5px solid #fab005; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                        <p style="font-size: 1.2em; margin: 0; color: #862e00;"><strong>📌 BACKUP → TEST → DEPLOY → VERIFY</strong></p>
+                        <p style="margin-top: 10px; color: #862e00;">Never skip the backup step. Even experienced administrators create backups.</p>
+                    </div>
+                    
+                    <h3 style="color: #e03131;">Required Workflow (LOCAL & ENTERPRISE Modes):</h3>
+                    <table style="margin: 20px 0; background: white;">
+                        <tr style="background: #ffe3e3;">
+                            <th style="width: 80px;">Step</th>
+                            <th>Action</th>
+                            <th>Menu Option</th>
+                            <th style="width: 120px;">Status</th>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td><strong>CREATE BACKUP</strong> of current settings</td>
+                            <td><span class="badge badge-required">Option 14</span></td>
+                            <td><span class="badge badge-required">⚡ REQUIRED</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Load and validate XML configuration</td>
+                            <td><span class="badge">Option 2/3</span></td>
+                            <td><span class="badge badge-required">Required</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>Preview changes (WhatIf mode)</td>
+                            <td><span class="badge badge-optional">Option 4</span></td>
+                            <td><span class="badge badge-optional">Recommended</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>Deploy configuration</td>
+                            <td><span class="badge badge-local">Option 11 (LOCAL)</span> or <span class="badge badge-enterprise">Option 13 (ENTERPRISE)</span></td>
+                            <td><span class="badge badge-required">Required</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>Test connectivity and verify</td>
+                            <td><span class="badge">Options 12, 17</span></td>
+                            <td><span class="badge badge-required">Required</span></td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><strong>🆘</strong></td>
+                            <td><strong>IF PROBLEMS: RESTORE</strong> from backup</td>
+                            <td><span class="badge badge-required">Option 15</span></td>
+                            <td><span class="badge badge-required">Emergency</span></td>
+                        </tr>
+                    </table>
+                    
+                    <h3 style="color: #e03131;">How Backup Works (Menu Option 14):</h3>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h4 style="margin-top: 0; color: #495057;">What Gets Backed Up:</h4>
+                        <ul style="line-height: 1.8;">
+                            <li>✅ <strong>All IPsec rules</strong> - Connection security rules currently configured</li>
+                            <li>✅ <strong>Phase 1 Authentication</strong> - Certificate-based auth sets</li>
+                            <li>✅ <strong>Main Mode Crypto</strong> - Key exchange and encryption settings</li>
+                            <li>✅ <strong>Quick Mode Crypto</strong> - ESP/AH encapsulation settings</li>
+                            <li>✅ <strong>Windows Firewall</strong> - Firewall profiles and settings</li>
+                        </ul>
+                        
+                        <h4 style="color: #495057;">Backup Location:</h4>
+                        <div class="code-block" style="margin: 10px 0;">
+<span class="comment"># Backups are created in the same directory as the script</span>
+<span class="comment"># Example: If script is in C:\temp\, backup goes to:</span>
+C:\temp\IPsec-Backup-SERVERNAME-20251103-143000\
+    ├── ipsec-static.conf         (IPsec policy - netsh format)
+    ├── firewall.wfw              (Firewall settings)
+    ├── configuration.xml         (Configuration summary)
+    └── BACKUP-MANIFEST.txt       (Restore instructions)
+                        </div>
+                        
+                        <h4 style="color: #495057;">Multiple Backups:</h4>
+                        <p>The utility keeps all backups with timestamps - you can restore from any previous backup.</p>
+                    </div>
+                    
+                    <h3 style="color: #e03131;">How Restore Works (Menu Option 15):</h3>
+                    <div style="background: #e7f5ff; border-left: 5px solid #1971c2; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                        <h4 style="margin-top: 0; color: #1864ab;">Emergency Rollback Process:</h4>
+                        <ol style="line-height: 1.8; color: #1864ab;">
+                            <li>Run <code style="background: rgba(0,0,0,0.05); padding: 2px 8px; border-radius: 3px;">.\Network-Security-Utility.ps1</code></li>
+                            <li>Select <strong>Option 15: Restore from Backup</strong></li>
+                            <li>Choose backup from list (most recent = top of list)</li>
+                            <li>Review backup details (date, computer, rule count)</li>
+                            <li>Type <code style="background: rgba(0,0,0,0.05); padding: 2px 8px; border-radius: 3px;">yes</code> to confirm restoration</li>
+                            <li>Wait for restore to complete (~30 seconds)</li>
+                            <li>Test connectivity to verify recovery</li>
+                        </ol>
+                        <p style="margin-bottom: 0;"><strong>⏱️ Typical restore time: 30-60 seconds</strong></p>
+                    </div>
+                    
+                    <h3 style="color: #e03131;">Real-World Example:</h3>
+                    <div class="code-block">
+<span class="comment"># CORRECT WORKFLOW - New administrator's first deployment:</span>
+
+<span class="prompt">PS C:\temp\></span> .\Network-Security-Utility.ps1
+
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="comment"># STEP 1: CREATE BACKUP FIRST! (Even if no IPsec configured)</span>
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="output">Choice: </span>14
+<span class="success">✓ Backup created: IPsec-Backup-SERVER01-20251103-143000</span>
+<span class="success">  Location: C:\temp\IPsec-Backup-SERVER01-20251103-143000\</span>
+<span class="success">  Size: 2.4 MB</span>
+
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="comment"># STEP 2: Load configuration</span>
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="output">Choice: </span>2
+<span class="output">Enter configuration file path: </span>.\Config.xml
+<span class="success">✓ Configuration loaded: 15 rules, valid settings</span>
+
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="comment"># STEP 3: Preview changes (optional but recommended)</span>
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="output">Choice: </span>4
+<span class="output">Total changes: 15 new rules, 1 auth set, 2 crypto sets</span>
+
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="comment"># STEP 4: Deploy (LOCAL mode = single server)</span>
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="output">Choice: </span>11
+<span class="success">✓ STEP 1 of 5: Firewall configured</span>
+<span class="success">✓ STEP 2 of 5: Phase 1 auth created</span>
+<span class="success">✓ STEP 3 of 5: Main Mode crypto created</span>
+<span class="success">✓ STEP 4 of 5: Quick Mode crypto created</span>
+<span class="success">✓ STEP 5 of 5: 15 IPsec rules applied</span>
+<span class="success">✓ All components configured successfully!</span>
+
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="comment"># STEP 5: Verify deployment</span>
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="output">Choice: </span>17
+<span class="output">Enter remote IP: </span>10.20.30.40
+<span class="success">✓ Quick Mode SA found - IPsec encryption ACTIVE!</span>
+
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="comment"># IF PROBLEMS OCCUR: Restore from backup</span>
+<span class="comment"># ══════════════════════════════════════════════════════════</span>
+<span class="output">Choice: </span>15
+<span class="output">Select backup: </span>1
+<span class="success">✓ Configuration restored from backup</span>
+                    </div>
+                    
+                    <h3 style="color: #e03131;">⚡ Key Takeaways for New Administrators:</h3>
+                    <div style="background: #fff9db; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <ul style="line-height: 2; font-size: 1.05em; margin: 0;">
+                            <li>✅ <strong>Backup takes 10 seconds</strong> - there's no excuse to skip it</li>
+                            <li>✅ <strong>Backups are automatic</strong> - utility does all the work</li>
+                            <li>✅ <strong>Restore is fast</strong> - 30-60 seconds to full recovery</li>
+                            <li>✅ <strong>Multiple backups supported</strong> - keep as many as you want</li>
+                            <li>✅ <strong>Works for LOCAL and ENTERPRISE</strong> - same backup process</li>
+                            <li>⚠️ <strong>If you skip backup and break connectivity</strong> - manual recovery is complex and time-consuming</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="error-box" style="border-left-color: #ff6b6b; background-color: #fff5f5; margin-top: 30px;">
+                        <h3 style="color: #c92a2a; margin-top: 0;">❌ What NOT To Do:</h3>
+                        <ul style="line-height: 1.8;">
+                            <li>❌ <strong>Don't deploy without backup</strong> - "It's just a test" is how outages happen</li>
+                            <li>❌ <strong>Don't skip validation</strong> - Invalid configs can cause connectivity loss</li>
+                            <li>❌ <strong>Don't deploy in production hours</strong> - Always deploy during maintenance windows</li>
+                            <li>❌ <strong>Don't test on production servers first</strong> - Use dev/test environments</li>
+                            <li>❌ <strong>Don't deploy to all servers at once</strong> - Start with one server, verify, then expand</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px;">
+                        <p style="color: white; font-size: 1.3em; font-weight: bold; margin: 0;">
+                            🛡️ Remember: Option 14 (Backup) → Option 11/13 (Deploy) → Option 15 (Restore if needed)
+                        </p>
+                    </div>
+                </div>
+                
+                <a href="#top" class="back-to-top" style="color: white; background: rgba(255,255,255,0.2);">↑ Back to Top</a>
+            </section>
+            
+            <!-- OVERVIEW SECTION -->
+            <section id="overview">
+                <h2>📋 Overview</h2>
+                
+                <p>The <strong>Network Security Utility</strong> is a comprehensive PowerShell tool designed to simplify the deployment, management, and troubleshooting of IPsec (Internet Protocol Security) configurations on Windows Server environments.</p>
+                
+                <h3>Key Features</h3>
+                <ul>
+                    <li>✅ <strong>Dual Operation Modes</strong>: LOCAL (standalone servers) and ENTERPRISE (GPO/Active Directory)</li>
+                    <li>✅ <strong>XML-Driven Configuration</strong>: Define IPsec settings once, deploy anywhere</li>
+                    <li>✅ <strong>Complete Lifecycle Management</strong>: Create, deploy, backup, restore, and monitor IPsec configurations</li>
+                    <li>✅ <strong>WhatIf Mode</strong>: Preview changes before applying them</li>
+                    <li>✅ <strong>Built-in Troubleshooting</strong>: Test connectivity, view events, check certificates</li>
+                    <li>✅ <strong>Comprehensive Logging</strong>: All operations logged for audit trails</li>
+                    <li>✅ <strong>Backup & Restore</strong>: Safe rollback capabilities</li>
+                </ul>
+                
+                <h3>What is IPsec?</h3>
+                <div class="info-box">
+                    <p><strong>IPsec (Internet Protocol Security)</strong> is a secure network protocol suite that authenticates and encrypts packets of data to provide secure encrypted communication between two computers over an Internet Protocol network.</p>
+                    <p><strong>Use Cases:</strong></p>
+                    <ul>
+                        <li>🔒 Secure server-to-server communication</li>
+                        <li>🔒 Protect sensitive data in transit</li>
+                        <li>🔒 Implement network segmentation security</li>
+                        <li>🔒 Enforce encrypted communication policies</li>
+                        <li>🔒 Comply with security regulations (PCI-DSS, HIPAA, etc.)</li>
+                    </ul>
+                </div>
+                
+                <h3>When to Use This Utility</h3>
+                <table>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Mode</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Single standalone server</td>
+                        <td><span class="badge badge-local">LOCAL</span></td>
+                        <td>Configure IPsec directly on one server without Active Directory</td>
+                    </tr>
+                    <tr>
+                        <td>Small environment (2-10 servers)</td>
+                        <td><span class="badge badge-local">LOCAL</span></td>
+                        <td>Deploy same configuration to multiple servers individually</td>
+                    </tr>
+                    <tr>
+                        <td>Domain environment</td>
+                        <td><span class="badge badge-enterprise">ENTERPRISE</span></td>
+                        <td>Deploy IPsec via Group Policy Objects (GPO) to multiple servers</td>
+                    </tr>
+                    <tr>
+                        <td>Large scale deployment (50+ servers)</td>
+                        <td><span class="badge badge-enterprise">ENTERPRISE</span></td>
+                        <td>Centralized management through Active Directory GPOs</td>
+                    </tr>
+                </table>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            <!-- REQUIREMENTS SECTION -->
+            <section id="requirements">
+                <h2>⚙️ System Requirements <span class="badge badge-required">⚡ READ FIRST</span></h2>
+                
+                <h3>Minimum Requirements</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Requirement</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Operating System</td>
+                        <td>Windows Server 2016+</td>
+                        <td>Windows Server 2019/2022 recommended</td>
+                    </tr>
+                    <tr>
+                        <td>PowerShell</td>
+                        <td>Version 4.0+</td>
+                        <td>Version 5.1+ recommended</td>
+                    </tr>
+                    <tr>
+                        <td>Permissions</td>
+                        <td>Local Administrator</td>
+                        <td><span class="badge badge-required">REQUIRED</span> for LOCAL mode</td>
+                    </tr>
+                    <tr>
+                        <td>Permissions (Enterprise)</td>
+                        <td>Domain Admin or GPO Editor</td>
+                        <td><span class="badge badge-required">REQUIRED</span> for ENTERPRISE mode</td>
+                    </tr>
+                    <tr>
+                        <td>PowerShell Modules</td>
+                        <td>NetSecurity</td>
+                        <td>Built-in on Windows Server</td>
+                    </tr>
+                    <tr>
+                        <td>PowerShell Modules (Enterprise)</td>
+                        <td>GroupPolicy</td>
+                        <td>Install with GPMC (Group Policy Management Console)</td>
+                    </tr>
+                </table>
+                
+                <h3>Installing Required Modules</h3>
+                <div class="code-block">
+<span class="comment"># Install Group Policy Management Console (for ENTERPRISE mode)</span>
+<span class="prompt">PS C:\></span> Install-WindowsFeature GPMC
+
+<span class="comment"># Verify PowerShell version</span>
+<span class="prompt">PS C:\></span> $PSVersionTable.PSVersion
+
+<span class="comment"># Verify NetSecurity module is available</span>
+<span class="prompt">PS C:\></span> Get-Module -ListAvailable NetSecurity
+
+<span class="comment"># Verify GroupPolicy module (for ENTERPRISE mode)</span>
+<span class="prompt">PS C:\></span> Get-Module -ListAvailable GroupPolicy
+                </div>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Important Notes</h4>
+                    <ul>
+                        <li><strong>Execution Policy:</strong> Set PowerShell execution policy to allow script execution</li>
+                        <li><strong>Firewall:</strong> Ensure Windows Firewall is enabled (required for IPsec)</li>
+                        <li><strong>Certificates:</strong> For certificate-based authentication, ensure PKI infrastructure is in place</li>
+                        <li><strong>Network Connectivity:</strong> For ENTERPRISE mode, ensure connectivity to Domain Controllers</li>
+                    </ul>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- GETTING STARTED SECTION -->
+            <section id="getting-started">
+                <h2>🚀 Getting Started <span class="badge badge-required">⚡ CRITICAL</span></h2>
+                
+                <p>The Network Security Utility is a <strong>standalone PowerShell script</strong> - no installation required. For quick deployment instructions, see <a href="#quickstart">Quick Start</a> section above.</p>
+                
+                <h3>Prerequisites Setup</h3>
+                
+                <p><span class="step-number">1</span> <strong>Set PowerShell Execution Policy</strong></p>
+                <div class="code-block">
+<span class="comment"># Run PowerShell as Administrator, then:</span>
+<span class="prompt">PS C:\></span> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+
+<span class="comment"># Verify the setting</span>
+<span class="prompt">PS C:\></span> Get-ExecutionPolicy
+RemoteSigned
+                </div>
+                
+                <p><span class="step-number">2</span> <strong>For ENTERPRISE Mode Only</strong></p>
+                <div class="code-block">
+<span class="comment"># Install Group Policy Management Console (GPMC)</span>
+<span class="prompt">PS C:\></span> Install-WindowsFeature GPMC
+
+<span class="comment"># Verify module availability</span>
+<span class="prompt">PS C:\></span> Get-Module -ListAvailable GroupPolicy
+                </div>
+                
+                <h3>Recommended File Organization</h3>
+                <div class="info-box">
+                    <h4>� Best Practices for Script Placement</h4>
+                    <ul>
+                        <li><strong>Script Location:</strong> Place in <code>C:\temp\</code> or <code>C:\Scripts\</code> for easy access</li>
+                        <li><strong>Config Files:</strong> Keep XML configurations in the same directory as the script</li>
+                        <li><strong>Logs:</strong> Script automatically creates log files in its directory</li>
+                        <li><strong>Backups:</strong> Consider creating a <code>C:\temp\backups\</code> subfolder for configuration backups</li>
+                    </ul>
+                </div>
+                
+                <h3>Pre-Deployment Checklist</h3>
+                <div class="success-box">
+                    <p>Before deploying to production, ensure:</p>
+                    <ol>
+                        <li>✓ PowerShell 4.0+ installed</li>
+                        <li>✓ Running as Administrator</li>
+                        <li>✓ Execution policy set to RemoteSigned</li>
+                        <li>✓ XML configuration validated with <code>Validate-Config.ps1</code></li>
+                        <li>✓ Windows Firewall enabled</li>
+                        <li>✓ Backup of current configuration created (if modifying existing setup)</li>
+                        <li>✓ Tested in lab environment first</li>
+                    </ol>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- BEST PRACTICES SECTION -->
+            <section id="best-practices">
+                <h2>✅ Configuration Validation <span class="badge badge-required">⚡ CRITICAL</span></h2>
+                
+                <p>Before deploying IPsec configurations to production, validate your configuration file to ensure it's complete, correct, and will deploy successfully. This section covers the two validation tools available.</p>
+                
+                <h3>Two-Stage Validation Approach</h3>
+                
+                <div class="info-box">
+                    <h4>🔍 Understanding the Validation Tools</h4>
+                    <p>The suite includes <strong>two complementary validation methods</strong>:</p>
+                    <ul>
+                        <li><strong>Validate-Config.ps1</strong>: Standalone validation tool with detailed reporting</li>
+                        <li><strong>Network-Security-Utility.ps1 Menu Option 2/3</strong>: Loads configuration for immediate use</li>
+                    </ul>
+                </div>
+                
+                <h3>Validate-Config.ps1 - Standalone Validation Tool</h3>
+                
+                <p>This dedicated validation script performs <strong>9 comprehensive tests</strong> on your XML configuration file:</p>
+                
+                <table>
+                    <tr>
+                        <th style="width: 100px;">Test</th>
+                        <th>What It Validates</th>
+                        <th>Why It Matters</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 1</strong></td>
+                        <td>File Exists</td>
+                        <td>Ensures file is accessible and readable</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 2</strong></td>
+                        <td>XML Parsing</td>
+                        <td>Confirms XML is well-formed (no syntax errors)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 3</strong></td>
+                        <td>Root Structure</td>
+                        <td>Validates required &lt;Settings&gt; root node</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 4</strong></td>
+                        <td>Domain Configuration</td>
+                        <td>Verifies ESAEDomain or Domain node present</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 5</strong></td>
+                        <td>IPsec Global Settings</td>
+                        <td>Checks all 10 required IPsec settings are present</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 6</strong></td>
+                        <td>IPsec Rules</td>
+                        <td>Validates rule structure and required fields</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 7</strong></td>
+                        <td>Cryptographic Settings</td>
+                        <td>Ensures algorithms are valid and secure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 8</strong></td>
+                        <td>Additional Configuration</td>
+                        <td>Detects CA paths, Azure config, production domains</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test 9</strong></td>
+                        <td>MDT/Deployment Fields</td>
+                        <td>Checks if deployment rules will be generated</td>
+                    </tr>
+                </table>
+                
+                <h4>Running Validate-Config.ps1</h4>
+                <div class="code-block">
+<span class="comment"># Validate your configuration file</span>
+<span class="prompt">PS C:\></span> .\Validate-Config.ps1 -ConfigFile ".\Config.xml"
+
+<span class="comment"># Example Output (Success)</span>
+========================================
+ Config.xml Validation Report
+========================================
+
+[TEST 1] Checking file exists...
+  ✓ PASSED: File found
+
+[TEST 2] Parsing XML...
+  ✓ PASSED: XML is well-formed
+
+<span class="comment"># ... 7 more tests ...</span>
+
+========================================
+ VALIDATION SUMMARY
+========================================
+
+Validation Results:
+  • Tests Passed: 9
+  • Errors: 0
+  • Warnings: 0
+
+✅ CONFIG FILE IS VALID AND COMPATIBLE
+                </div>
+                
+                <h3>Network-Security-Utility.ps1 Menu Option - Load Configuration</h3>
+                
+                <p>When you select <strong>Option 2/3 (Load/Test XML Configuration File)</strong> from the menu, the utility:</p>
+                
+                <ul>
+                    <li>✅ Validates XML structure and parsing</li>
+                    <li>✅ Checks required IPsec settings (10 fields)</li>
+                    <li>✅ Validates cryptographic algorithms</li>
+                    <li>✅ Verifies rule structure</li>
+                    <li>✅ Loads MDT/Deployment fields (if present)</li>
+                    <li>✅ <strong>Loads configuration into memory for immediate use</strong></li>
+                </ul>
+                
+                <p>However, it <strong>does NOT</strong> provide:</p>
+                
+                <ul>
+                    <li>❌ Test-by-test breakdown with detailed reporting</li>
+                    <li>❌ Sample rule displays</li>
+                    <li>❌ Algorithm whitelist validation with suggestions</li>
+                    <li>❌ Comprehensive summary reports</li>
+                    <li>❌ Exit codes for automation/scripting</li>
+                </ul>
+                
+                <h3>Recommended Workflow</h3>
+                
+                <div class="warning-box">
+                    <h4>⚠️ IMPORTANT: Two-Stage Validation</h4>
+                    <p>Always follow this sequence before production deployment:</p>
+                    <ol>
+                        <li><strong>Stage 1 - Standalone Validation</strong>
+                            <ul>
+                                <li>Run <code>Validate-Config.ps1</code> first</li>
+                                <li>Review detailed test-by-test results</li>
+                                <li>Fix any errors or warnings found</li>
+                                <li>Re-validate until all tests pass</li>
+                            </ul>
+                        </li>
+                        <li><strong>Stage 2 - Deployment</strong>
+                            <ul>
+                                <li>Launch <code>Network-Security-Utility.ps1</code></li>
+                                <li>Use Menu Option 2/3 to load configuration</li>
+                                <li>Proceed with deployment</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <h3>Validation Comparison Matrix</h3>
+                
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Validate-Config.ps1</th>
+                        <th>Menu Option 2/3</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Purpose</strong></td>
+                        <td>Pre-deployment validation</td>
+                        <td>Load config for use</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Breakdown</strong></td>
+                        <td>✅ 9 detailed tests</td>
+                        <td>❌ Silent validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sample Rules Display</strong></td>
+                        <td>✅ Shows 3 sample rules</td>
+                        <td>❌ Not displayed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Algorithm Validation</strong></td>
+                        <td>✅ Whitelist + suggestions</td>
+                        <td>✅ Whitelist validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Counts & Reports</strong></td>
+                        <td>✅ Rules, IPs, domains, MDT fields</td>
+                        <td>❌ Not reported</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exit Codes</strong></td>
+                        <td>✅ 0=success, 1=error</td>
+                        <td>❌ No exit codes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loads Into Memory</strong></td>
+                        <td>❌ Validation only</td>
+                        <td>✅ Ready for deployment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Case</strong></td>
+                        <td>Quality gate, CI/CD</td>
+                        <td>Operational deployment</td>
+                    </tr>
+                </table>
+                
+                <h3>When to Use Each Tool</h3>
+                
+                <div class="success-box">
+                    <h4>✅ Use Validate-Config.ps1 When:</h4>
+                    <ul>
+                        <li>Pre-deployment validation is required</li>
+                        <li>Troubleshooting XML configuration issues</li>
+                        <li>Verifying Config.xml before sharing with team</li>
+                        <li>Integrating into automation/CI/CD pipelines</li>
+                        <li>Detailed reporting is needed for documentation</li>
+                        <li>Quality gate for production deployments</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h4>📋 Use Network-Security-Utility.ps1 Menu Option When:</h4>
+                    <ul>
+                        <li>Loading configuration for immediate deployment</li>
+                        <li>Interactive operations (menu-driven workflow)</li>
+                        <li>Quick verification that config loads correctly</li>
+                        <li>Part of normal deployment workflow</li>
+                        <li>Configuration already validated separately</li>
+                    </ul>
+                </div>
+                
+                <h3>Example: Complete Validation Workflow</h3>
+                
+                <div class="code-block">
+<span class="comment"># STEP 1: Standalone validation (detailed)</span>
+<span class="prompt">PS C:\IPsec></span> .\Validate-Config.ps1 -ConfigFile ".\Config.xml"
+
+<span class="comment"># Review output - if all tests pass, proceed</span>
+✅ CONFIG FILE IS VALID AND COMPATIBLE
+
+<span class="comment"># STEP 2: Load into utility for deployment</span>
+<span class="prompt">PS C:\IPsec></span> .\Network-Security-Utility.ps1 -ConfigFile ".\Config.xml"
+
+<span class="comment"># Select menu option 11 (Apply Complete Configuration)</span>
+<span class="comment"># Configuration is already validated, deployment proceeds smoothly</span>
+                </div>
+                
+                <div class="error-box">
+                    <h4>🚫 Common Mistakes to Avoid</h4>
+                    <ul>
+                        <li><strong>Skipping standalone validation</strong> - Always run Validate-Config.ps1 first</li>
+                        <li><strong>Assuming menu load = full validation</strong> - Menu option validates but doesn't report details</li>
+                        <li><strong>Not reviewing validation output</strong> - Check all 9 test results carefully</li>
+                        <li><strong>Deploying after warnings</strong> - Investigate warnings before production deployment</li>
+                        <li><strong>No backup before deployment</strong> - Always backup existing config first (Menu Option 14)</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h4>📖 Related Sections</h4>
+                    <ul>
+                        <li>📍 <a href="#workflows">Common Workflows</a> - See the authoritative production deployment workflow</li>
+                        <li>📍 <a href="#local-mode">LOCAL MODE</a> - Apply configuration to standalone servers</li>
+                        <li>📍 <a href="#enterprise-mode">ENTERPRISE MODE</a> - Deploy via Group Policy</li>
+                    </ul>
+                </div>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- WORKFLOWS SECTION -->
+            <section id="workflows">
+                <h2>🔄 Common Workflows & Use Cases <span class="badge badge-required">⚡ RECOMMENDED</span></h2>
+                
+                <div class="info-box">
+                    <h4>📘 Standard Production Workflow (All Modes)</h4>
+                    <ol style="font-size: 1.05em; line-height: 1.8;">
+                        <li><strong>Validate Config:</strong> Run <code>Validate-Config.ps1</code> first - ensures complete & correct configuration</li>
+                        <li><strong>Fix Issues:</strong> Address all errors and warnings before proceeding</li>
+                        <li><strong>Load & Deploy:</strong> Run <code>Network-Security-Utility.ps1</code> with validated config</li>
+                        <li><strong>Test:</strong> Verify connectivity and review logs</li>
+                    </ol>
+                    <p>👉 <strong>This is the authoritative workflow for all production deployments.</strong> Other sections reference this process.</p>
+                </div>
+                
+                <h3>Scenario 1: First-Time IPsec Deployment (LOCAL MODE)</h3>
+                <div class="code-block">
+<span class="comment"># Step 1: Run the utility from C:\temp\</span>
+<span class="prompt">PS C:\temp\></span> .\Network-Security-Utility.ps1 -ConfigFile ".\MyIPsecConfig.xml"
+
+<span class="comment"># Step 2: From menu, create backup (Option 14)</span>
+<span class="comment"># Step 3: Preview changes (Option 20)</span>
+<span class="comment"># Step 4: Apply complete configuration (Option 11)</span>
+<span class="comment"># Step 5: Test connectivity (Option 17)</span>
+<span class="comment"># Step 6: Generate report (Option 13)</span>
+                </div>
+                
+                <h3>Scenario 2: Updating Existing Configuration</h3>
+                <p><span class="step-number">1</span> Backup current settings (Option 14/17)</p>
+                <p><span class="step-number">2</span> Load new XML configuration (Option 2/3)</p>
+                <p><span class="step-number">3</span> Preview what will change (Option 20)</p>
+                <p><span class="step-number">4</span> Remove old rules (Option 5/6)</p>
+                <p><span class="step-number">5</span> Apply new configuration (Option 11/13)</p>
+                <p><span class="step-number">6</span> Verify with test (Option 17)</p>
+                
+                <h3>Scenario 3: Enterprise-Wide GPO Deployment</h3>
+                <div class="code-block">
+<span class="comment"># Run on Domain Controller or management workstation</span>
+<span class="prompt">PS C:\temp\></span> .\Network-Security-Utility.ps1 -ConfigFile ".\CompanyIPsec.xml"
+
+<span class="comment"># Workflow in ENTERPRISE MODE:</span>
+<span class="comment"># 1. Option 3: Load XML configuration</span>
+<span class="comment"># 2. Option 20: Preview changes (WhatIf)</span>
+<span class="comment"># 3. Option 8: Test on local server first</span>
+<span class="comment"># 4. Option 9: List existing GPOs (check for conflicts)</span>
+<span class="comment"># 5. Option 13: Apply Complete GPO Configuration</span>
+<span class="comment">#    - Creates GPO</span>
+<span class="comment">#    - Links to specified OUs</span>
+<span class="comment">#    - Tests replication</span>
+<span class="comment"># 6. Option 14: Verify replication to all DCs</span>
+<span class="comment"># 7. On target servers, run: gpupdate /force</span>
+                </div>
+                
+                <h3>Scenario 4: Troubleshooting IPsec Connectivity</h3>
+                <div class="warning-box">
+                    <p><strong>Problem:</strong> IPsec not establishing between Server A and Server B</p>
+                    <p><strong>Troubleshooting Steps:</strong></p>
+                    <ol>
+                        <li><strong>Option 1:</strong> View current configuration on both servers</li>
+                        <li><strong>Option 19:</strong> Check certificates (if using cert auth)</li>
+                        <li><strong>Option 18:</strong> View IPsec event logs for errors</li>
+                        <li><strong>Option 17:</strong> Test connectivity to remote host</li>
+                        <li><strong>Option 3:</strong> Check Security Association status</li>
+                        <li><strong>Option 16:</strong> Review firewall logs for blocked packets</li>
+                    </ol>
+                </div>
+                
+                <h3>Scenario 5: Emergency Rollback</h3>
+                <div class="error-box">
+                    <p><strong>Problem:</strong> New IPsec configuration causing connectivity issues</p>
+                    <p><strong>Quick Rollback:</strong></p>
+                    <ol>
+                        <li>Run the utility: <code>.\Network-Security-Utility.ps1</code></li>
+                        <li>Select <strong>Option 15</strong> (Restore from Backup)</li>
+                        <li>Choose the most recent backup before changes</li>
+                        <li>Confirm restoration</li>
+                        <li>Test connectivity with <strong>Option 17</strong></li>
+                    </ol>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- PARTIAL CONFIGURATION SUPPORT SECTION -->
+            <section id="partial-config">
+                <h2>🔧 Partial Configuration Support <span class="badge badge-optional">🎓 Advanced Feature</span></h2>
+                
+                <p>Network-Security-Utility.ps1 supports <strong>partial/incomplete configuration files</strong> for development and testing. Instead of requiring all fields upfront, the utility loads whatever is available and validates specific requirements only when operations need them.</p>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Production Deployment? Use Complete Configs!</h4>
+                    <p><strong>Partial configs are for:</strong> Development • Testing • Learning • Troubleshooting</p>
+                    <p><strong>Production deployments MUST use:</strong> Complete validated configs with Validate-Config.ps1 first!</p>
+                </div>
+                
+                <h3>⚡ Quick Reference: What Each Operation Needs</h3>
+                
+                <table>
+                    <tr>
+                        <th>Menu Option</th>
+                        <th>Operation</th>
+                        <th>Requires CAPath</th>
+                        <th>Requires Crypto Settings</th>
+                        <th>Requires Rules</th>
+                    </tr>
+                    <tr>
+                        <td><strong>2/3</strong></td>
+                        <td>Load/Test Config</td>
+                        <td>❌ Optional</td>
+                        <td>❌ Optional</td>
+                        <td>❌ Optional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Create Phase1 Auth</td>
+                        <td>✅ Required</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>Create Main Mode</td>
+                        <td>❌</td>
+                        <td>✅ MM Settings</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>Create Quick Mode</td>
+                        <td>❌</td>
+                        <td>✅ QM Settings</td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Apply IPsec Rules</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅ Required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td>Apply Complete Config</td>
+                        <td>✅ Required</td>
+                        <td>✅ All Settings</td>
+                        <td>✅ Required</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Legend</strong>: ✅ Required | ❌ Not Required | MM = Main Mode | QM = Quick Mode</p>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+                
+                <h3>💡 How It Works</h3>
+                
+                <p><strong>Key Concept:</strong> "Load What You Have, Validate What You Need" - Just-in-time validation</p>
+                
+                <table>
+                    <tr>
+                        <th>Before (Strict)</th>
+                        <th>After (Flexible)</th>
+                    </tr>
+                    <tr>
+                        <td>❌ Required ALL 10 settings</td>
+                        <td>✅ Loads 0-10 settings</td>
+                    </tr>
+                    <tr>
+                        <td>❌ Failed if any missing</td>
+                        <td>✅ Reports "Loaded X/10"</td>
+                    </tr>
+                    <tr>
+                        <td>❌ No partial configs</td>
+                        <td>✅ Validates per operation</td>
+                    </tr>
+                    <tr>
+                        <td>❌ Unclear errors</td>
+                        <td>✅ Clear errors + XML examples</td>
+                    </tr>
+                </table>
+                
+                <div class="info-box">
+                    <h4>📘 What You'll See</h4>
+                    <p><strong>When an operation needs a missing field:</strong></p>
+                    <pre><code>❌ MISSING REQUIREMENT: CAPath
+Operation: Create Phase1 Authentication
+Required Field: &lt;CAPath&gt; element in &lt;ESAEDomain&gt; or &lt;Domain&gt; node
+
+Example:
+  &lt;Domain&gt;
+    &lt;CAPath&gt;DC=contoso,DC=com,CN=Contoso-Root-CA&lt;/CAPath&gt;
+  &lt;/Domain&gt;</code></pre>
+                </div>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+                
+                <h3>🎓 Advanced: Detailed Field Requirements</h3>
+                
+                <p><em>Expand sections below for specific XML requirements per operation:</em></p>
+                
+                <h4>📋 Phase1 Authentication (Menu Option 7)</h4>
+                <div class="info-box">
+                    <p><strong>Requires:</strong> <code>&lt;CAPath&gt;</code> - Certificate Authority path</p>
+                    <details>
+                        <summary><strong>Click to see minimum Config.xml ▼</strong></summary>
+                        <pre><code>&lt;Settings&gt;
+  &lt;Domain&gt;
+    &lt;NetBIOSName&gt;CONTOSO&lt;/NetBIOSName&gt;
+    &lt;FQDNName&gt;contoso.com&lt;/FQDNName&gt;
+    &lt;DN&gt;DC=contoso,DC=com&lt;/DN&gt;
+    &lt;CAPath&gt;DC=contoso,DC=com,CN=Contoso-Root-CA&lt;/CAPath&gt;
+  &lt;/Domain&gt;
+&lt;/Settings&gt;</code></pre>
+                    </details>
+                </div>
+                
+                <h4>📋 Main Mode Cryptography (Menu Option 8)</h4>
+                <div class="info-box">
+                    <p><strong>Requires:</strong> IPsecMMEncryption, IPsecMMHash, IPsecKeyExchange, IPsecKeyModule, IPsecMaxSessions</p>
+                </div>
+                
+                <h4>📋 Quick Mode Cryptography (Menu Option 9)</h4>
+                <div class="info-box">
+                    <p><strong>Requires:</strong> IPsecQMEncryption, IPsecQMHash, IPsecEncapsulation</p>
+                </div>
+                
+                <h4>📋 Apply IPsec Rules (Menu Option 10)</h4>
+                <div class="info-box">
+                    <p><strong>Requires:</strong> At least one <code>&lt;Rule&gt;</code> element in <code>&lt;IPsec&gt;&lt;Rules&gt;</code></p>
+                </div>
+                
+                <h4>⚠️ Apply Complete Configuration (Menu Option 11)</h4>
+                <div class="warning-box">
+                    <p><strong>This option requires EVERYTHING:</strong></p>
+                    <ul>
+                        <li>✅ CAPath</li>
+                        <li>✅ ALL 10 IPsec Global settings (MMEncryption, MMHash, QMEncryption, QMHash, KeyExchange, KeyModule, Encapsulation, MaxSessions, CrlCheck, Exemptions)</li>
+                        <li>✅ At least one Rule</li>
+                    </ul>
+                    <p>👉 Use Validate-Config.ps1 to ensure completeness before running this option.</p>
+                </div>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+                
+                <h3>🎓 Advanced: Incremental Development Workflow</h3>
+                
+                <p><em>This section shows how to build Config.xml step-by-step. Skip if using complete configs.</em></p>
+                
+                <details>
+                    <summary><strong>Click to expand incremental build steps ▼</strong></summary>
+                    
+                    <p>You can build your Config.xml incrementally:</p>
+                    
+                    <div class="code-block">
+<span class="comment"># Step 1: Start with basic domain info</span>
+&lt;Settings&gt;
+  &lt;Domain&gt;
+    &lt;NetBIOSName&gt;CONTOSO&lt;/NetBIOSName&gt;
+    &lt;FQDNName&gt;contoso.com&lt;/FQDNName&gt;
+    &lt;DN&gt;DC=contoso,DC=com&lt;/DN&gt;
+  &lt;/Domain&gt;
+&lt;/Settings&gt;
+<span class="success"># ✅ Loads successfully, operations show what's needed</span>
+                    </div>
+                    
+                    <div class="code-block">
+<span class="comment"># Step 2: Add cryptographic settings</span>
+&lt;IPsec&gt;&lt;Global&gt;
+  &lt;IPsecMMEncryption&gt;AES256&lt;/IPsecMMEncryption&gt;
+  &lt;IPsecMMHash&gt;SHA256&lt;/IPsecMMHash&gt;
+  &lt;IPsecQMEncryption&gt;AESGCM256&lt;/IPsecQMEncryption&gt;
+  &lt;IPsecQMHash&gt;SHA256&lt;/IPsecQMHash&gt;
+  &lt;!-- ... other crypto settings ... --&gt;
+&lt;/Global&gt;&lt;/IPsec&gt;
+<span class="success"># ✅ Can now use Options 8 & 9 (Main/Quick Mode)</span>
+                    </div>
+                    
+                    <div class="code-block">
+<span class="comment"># Step 3: Add CAPath</span>
+&lt;Domain&gt;
+  &lt;CAPath&gt;DC=contoso,DC=com,CN=Contoso-Root-CA&lt;/CAPath&gt;
+&lt;/Domain&gt;
+<span class="success"># ✅ Can now use Option 7 (Phase1 Auth)</span>
+                    </div>
+                    
+                    <div class="code-block">
+<span class="comment"># Step 4: Add Rules</span>
+&lt;IPsec&gt;&lt;Rules&gt;
+  &lt;Rule&gt;
+    &lt;Name&gt;My-IPsec-Rule&lt;/Name&gt;
+    &lt;Inbound&gt;Require&lt;/Inbound&gt;
+    &lt;Outbound&gt;Require&lt;/Outbound&gt;
+  &lt;/Rule&gt;
+&lt;/Rules&gt;&lt;/IPsec&gt;
+<span class="success"># ✅ Complete! Can now use Option 11 (Full Deploy)</span>
+                    </div>
+                </details>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+                
+                <h3>🎓 Advanced: Testing Crypto Settings Only</h3>
+                
+                <p><em>Example: Create a minimal config to test cryptographic algorithms without full deployment:</em></p>
+                
+                <details>
+                    <summary><strong>Click to see crypto-only test example ▼</strong></summary>
+                    
+                    <p>Create a minimal config to test cryptographic algorithms:</p>
+                
+                <div class="code-block">
+<span class="comment"># Config-CryptoTest.xml - Test crypto settings only</span>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Settings&gt;
+  &lt;Domain&gt;
+    &lt;NetBIOSName&gt;TEST&lt;/NetBIOSName&gt;
+    &lt;FQDNName&gt;test.local&lt;/FQDNName&gt;
+    &lt;DN&gt;DC=test,DC=local&lt;/DN&gt;
+    
+    &lt;IPsec&gt;
+      &lt;Global&gt;
+        &lt;IPsecMMEncryption&gt;AES256&lt;/IPsecMMEncryption&gt;
+        &lt;IPsecMMHash&gt;SHA256&lt;/IPsecMMHash&gt;
+        &lt;IPsecQMEncryption&gt;AESGCM256&lt;/IPsecQMEncryption&gt;
+        &lt;IPsecQMHash&gt;SHA256&lt;/IPsecQMHash&gt;
+        &lt;IPsecKeyExchange&gt;DH14&lt;/IPsecKeyExchange&gt;
+        &lt;IPsecKeyModule&gt;Kerberos&lt;/IPsecKeyModule&gt;
+        &lt;IPsecEncapsulation&gt;ESP&lt;/IPsecEncapsulation&gt;
+        &lt;IPsecMaxSessions&gt;2048&lt;/IPsecMaxSessions&gt;
+        &lt;IPsecCrlCheck&gt;None&lt;/IPsecCrlCheck&gt;
+        &lt;IPsecExemptions&gt;None&lt;/IPsecExemptions&gt;
+      &lt;/Global&gt;
+    &lt;/IPsec&gt;
+  &lt;/Domain&gt;
+&lt;/Settings&gt;
+                </div>
+                
+                <div class="code-block">
+<span class="comment"># Load and test crypto settings</span>
+<span class="prompt">PS C:\IPsec></span> .\Network-Security-Utility.ps1 -ConfigFile ".\Config-CryptoTest.xml"
+
+<span class="comment"># Select Option 2 - Load/Test XML Configuration File</span>
+<span class="success">✓ Configuration loaded successfully
+✓ Loaded 10/10 IPsec Global settings
+✓ Cryptographic settings validated successfully</span>
+
+<span class="comment"># Try Option 8 - Create Main Mode Crypto Sets</span>
+<span class="success">✓ Main Mode crypto set created successfully!</span>
+
+<span class="comment"># Try Option 9 - Create Quick Mode Crypto Sets</span>
+<span class="success">✓ Quick Mode crypto set created successfully!</span>
+
+<span class="comment"># Try Option 7 - Create Phase1 Authentication</span>
+<span class="error">✗ MISSING REQUIREMENT: CAPath
+  Operation: Create Phase1 Authentication
+  Required Field: &lt;CAPath&gt; element needed</span>
+
+<span class="comment"># Try Option 10 - Apply IPsec Rules</span>
+<span class="error">✗ MISSING REQUIREMENTS: IPsec Rules
+  Operation: Apply IPsec Rules
+  Required: At least one &lt;Rule&gt; element</span>
+                </div>
+                </details>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+                
+                <h3>📚 Summary</h3>
+                
+                <div class="success-box">
+                    <h4>✅ Use Partial Configs For:</h4>
+                    <p>Development • Testing • Learning • Troubleshooting individual components</p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Production Deployments Must:</h4>
+                    <ol>
+                        <li>Use complete Config.xml with all required fields</li>
+                        <li>Run Validate-Config.ps1 first</li>
+                        <li>Fix all errors and warnings</li>
+                        <li>Deploy with complete configuration (Option 11)</li>
+                    </ol>
+                </div>
+                
+                <p><strong>Additional Resources:</strong></p>
+                <ul>
+                    <li>📄 <strong>Chunk-Validation-Quick-Reference.md</strong> - Quick lookup for operation requirements</li>
+                    <li>📄 <strong>Chunk-Validation-Implementation-Summary.md</strong> - Technical deep-dive for developers</li>
+                    <li>⚙️ <strong>Validate-Config.ps1</strong> - Standalone validation tool (recommended for production)</li>
+                </ul>
+                
+                <div class="info-box">
+                    <h4>📖 Related Sections</h4>
+                    <ul>
+                        <li>📍 <a href="#best-practices">Configuration Validation</a> - Learn about Validate-Config.ps1 tool</li>
+                        <li>📍 <a href="#workflows">Common Workflows</a> - See production deployment best practices</li>
+                        <li>📍 <a href="#local-mode">LOCAL MODE</a> - Menu options 7-11 for partial config operations</li>
+                    </ul>
+                </div>
+                
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- LOCAL MODE SECTION -->
+            <section id="local-mode">
+                <h2>🖥️ LOCAL MODE - Standalone Server Configuration <span class="badge badge-local">⚡ PRODUCTION</span></h2>
+                
+                <p>LOCAL MODE is designed for configuring IPsec directly on standalone servers without Active Directory. This mode is ideal for small environments or servers not joined to a domain.</p>
+                
+                <h3>Complete LOCAL MODE Menu</h3>
+                <div class="menu-display"><span class="menu-title">LOCAL MODE - Standalone Server Configuration</span>
+
+<span class="menu-section">INFORMATION & TESTING</span>
+<span class="menu-option">  1.  View Current IPsec Configuration</span>
+<span class="menu-option">  2.  Load/Test XML Configuration File</span>
+<span class="menu-option">  3.  View IPsec Statistics & Status</span>
+<span class="menu-option">  4.  Show Loaded Configuration</span>
+
+<span class="menu-section">LOCAL CONFIGURATION</span>
+<span class="menu-option menu-warning">  5.  Remove All IPsec Rules</span>
+<span class="menu-option">  6.  Configure Windows Firewall</span>
+<span class="menu-option">  7.  Create Phase 1 Authentication</span>
+<span class="menu-option">  8.  Create Main Mode Crypto Sets</span>
+<span class="menu-option">  9.  Create Quick Mode Crypto Sets</span>
+<span class="menu-option">  10. Apply IPsec Rules</span>
+<span class="menu-option menu-success">  11. Apply Complete Configuration (All Steps)</span>
+
+<span class="menu-section">UTILITIES</span>
+<span class="menu-option">  12. Export Current Configuration to XML</span>
+<span class="menu-option">  13. Generate HTML Report</span>
+<span class="menu-option">  14. Backup Current Settings</span>
+<span class="menu-option">  15. Restore from Backup</span>
+<span class="menu-option">  16. View Firewall Logs</span>
+
+<span class="menu-section">TROUBLESHOOTING</span>
+<span class="menu-option">  17. Test IPsec Connectivity to Remote Host</span>
+<span class="menu-option">  18. View IPsec Event Logs</span>
+<span class="menu-option">  19. View Certificate Information</span>
+
+<span class="menu-section">ANALYSIS</span>
+<span class="menu-option menu-highlight">  20. Preview Changes (WhatIf Mode)</span>
+
+<span class="menu-option">  0.  Exit</span></div>
+                
+                <h3>Menu Option Details</h3>
+                
+                <h4>INFORMATION & TESTING Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Use When</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>View Current IPsec Configuration</td>
+                        <td>Check what IPsec rules are currently active on this server</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Load/Test XML Configuration File</td>
+                        <td>Load your configuration file into memory and validate syntax</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>View IPsec Statistics & Status</td>
+                        <td>See active Security Associations (SAs) and connection statistics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Show Loaded Configuration</td>
+                        <td>Display the configuration currently loaded in memory</td>
+                    </tr>
+                </table>
+                
+                <h4>LOCAL CONFIGURATION Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Warning</th>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Remove All IPsec Rules</td>
+                        <td><span class="badge badge-required">DESTRUCTIVE</span> Removes all existing IPsec configuration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Configure Windows Firewall</td>
+                        <td>Sets firewall profiles as defined in XML</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Create Phase 1 Authentication</td>
+                        <td>Creates authentication methods (Kerberos, certificates, PSK)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>Create Main Mode Crypto Sets</td>
+                        <td>Defines encryption algorithms for IKE Phase 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>Create Quick Mode Crypto Sets</td>
+                        <td>Defines encryption algorithms for IKE Phase 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Apply IPsec Rules</td>
+                        <td>Creates connection security rules from XML</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td>Apply Complete Configuration</td>
+                        <td><span class="badge badge-optional">RECOMMENDED</span> Runs all steps automatically (6-10)</td>
+                    </tr>
+                </table>
+                
+                <h4>UTILITIES Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Output</th>
+                    </tr>
+                    <tr>
+                        <td><strong>12</strong></td>
+                        <td>Export Current Configuration to XML</td>
+                        <td>Creates XML file of current IPsec settings</td>
+                    </tr>
+                    <tr>
+                        <td><strong>13</strong></td>
+                        <td>Generate HTML Report</td>
+                        <td>Creates formatted HTML report of current configuration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>14</strong></td>
+                        <td>Backup Current Settings</td>
+                        <td>Creates timestamped backup directory with all settings</td>
+                    </tr>
+                    <tr>
+                        <td><strong>15</strong></td>
+                        <td>Restore from Backup</td>
+                        <td>Restores IPsec configuration from previous backup</td>
+                    </tr>
+                    <tr>
+                        <td><strong>16</strong></td>
+                        <td>View Firewall Logs</td>
+                        <td>Opens Windows Firewall log file in Notepad</td>
+                    </tr>
+                </table>
+                
+                <h4>TROUBLESHOOTING Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>What It Checks</th>
+                    </tr>
+                    <tr>
+                        <td><strong>17</strong></td>
+                        <td>Test IPsec Connectivity</td>
+                        <td>Tests Security Association formation with remote host</td>
+                    </tr>
+                    <tr>
+                        <td><strong>18</strong></td>
+                        <td>View IPsec Event Logs</td>
+                        <td>Displays Security log entries related to IPsec (events 4646-4660, 5451-5458)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>19</strong></td>
+                        <td>View Certificate Information</td>
+                        <td>Shows machine certificates, expiration dates, and IPsec suitability</td>
+                    </tr>
+                </table>
+                
+                <h4>ANALYSIS Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Safety</th>
+                    </tr>
+                    <tr>
+                        <td><strong>20</strong></td>
+                        <td>Preview Changes (WhatIf Mode)</td>
+                        <td><span class="badge badge-optional">SAFE</span> Shows what would change without making changes</td>
+                    </tr>
+                </table>
+                
+                <h3>Typical LOCAL MODE Workflow</h3>
+                <div class="workflow-diagram">
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 14: Backup</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 2: Load XML</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 20: Preview Changes</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 11: Apply Complete</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div>
+                        <div class="workflow-step">Option 17: Test Connectivity</div>
+                    </div>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            <!-- ENTERPRISE MODE SECTION -->
+            <section id="enterprise-mode">
+                <h2>🏢 ENTERPRISE MODE - GPO/Active Directory Configuration <span class="badge badge-enterprise">⚡ PRODUCTION</span></h2>
+                
+                <p>ENTERPRISE MODE is designed for deploying IPsec via Group Policy Objects (GPOs) in Active Directory environments. This mode enables centralized management and deployment to multiple servers.</p>
+                
+                <h3>Complete ENTERPRISE MODE Menu</h3>
+                <div class="menu-display"><span class="menu-title">ENTERPRISE MODE - GPO/Active Directory Configuration</span>
+
+<span class="menu-section">INFORMATION & TESTING</span>
+<span class="menu-option">  1.  View Current Local IPsec Configuration</span>
+<span class="menu-option">  2.  View GPO IPsec Configuration</span>
+<span class="menu-option">  3.  Load/Test XML Configuration File</span>
+<span class="menu-option">  4.  View IPsec Statistics & Status</span>
+<span class="menu-option">  5.  Show Loaded Configuration</span>
+
+<span class="menu-section">LOCAL CONFIGURATION (This Server Only)</span>
+<span class="menu-option menu-warning">  6.  Remove All Local IPsec Rules</span>
+<span class="menu-option">  7.  Configure Local Windows Firewall</span>
+<span class="menu-option">  8.  Apply Local IPsec Configuration</span>
+
+<span class="menu-section">DOMAIN CONFIGURATION (GPO/Active Directory)</span>
+<span class="menu-option">  9.  List Existing IPsec GPOs</span>
+<span class="menu-option">  10. Create/Update IPsec GPOs</span>
+<span class="menu-option">  11. Link GPOs to OUs</span>
+<span class="menu-option menu-warning">  12. Remove IPsec GPOs</span>
+<span class="menu-option menu-success">  13. Apply Complete GPO Configuration</span>
+<span class="menu-option">  14. Test GPO Replication Status</span>
+
+<span class="menu-section">UTILITIES</span>
+<span class="menu-option">  15. Export Current Configuration to XML</span>
+<span class="menu-option">  16. Generate HTML Report</span>
+<span class="menu-option">  17. Backup Current Settings</span>
+<span class="menu-option">  18. Restore from Backup</span>
+<span class="menu-option">  19. View Firewall Logs</span>
+
+<span class="menu-section">ANALYSIS</span>
+<span class="menu-option menu-highlight">  20. Preview Changes (WhatIf Mode)</span>
+
+<span class="menu-option">  0.  Exit</span></div>
+                
+                <h3>Menu Option Details</h3>
+                
+                <h4>INFORMATION & TESTING Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Scope</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>View Current Local IPsec Configuration</td>
+                        <td>Shows IPsec rules active on THIS server</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>View GPO IPsec Configuration</td>
+                        <td>Shows IPsec settings in a specific GPO</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Load/Test XML Configuration File</td>
+                        <td>Loads and validates XML configuration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>View IPsec Statistics & Status</td>
+                        <td>Shows Security Associations on THIS server</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Show Loaded Configuration</td>
+                        <td>Displays configuration in memory</td>
+                    </tr>
+                </table>
+                
+                <h4>LOCAL CONFIGURATION Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Scope</th>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Remove All Local IPsec Rules</td>
+                        <td><span class="badge badge-required">LOCAL ONLY</span> Removes rules on THIS server</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Configure Local Windows Firewall</td>
+                        <td><span class="badge badge-required">LOCAL ONLY</span> Configures THIS server</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>Apply Local IPsec Configuration</td>
+                        <td><span class="badge badge-required">LOCAL ONLY</span> Applies settings to THIS server</td>
+                    </tr>
+                </table>
+                
+                <h4>DOMAIN CONFIGURATION Section</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Requirements</th>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>List Existing IPsec GPOs</td>
+                        <td>Searches domain for GPOs with IPsec/Firewall settings</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Create/Update IPsec GPOs</td>
+                        <td><span class="badge badge-required">Domain Admin</span> Creates new or updates existing GPO</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td>Link GPOs to OUs</td>
+                        <td><span class="badge badge-required">Domain Admin</span> Links GPO to Organizational Units</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12</strong></td>
+                        <td>Remove IPsec GPOs</td>
+                        <td><span class="badge badge-required">Domain Admin</span> Safely removes GPO with backup</td>
+                    </tr>
+                    <tr>
+                        <td><strong>13</strong></td>
+                        <td>Apply Complete GPO Configuration</td>
+                        <td><span class="badge badge-optional">RECOMMENDED</span> Orchestrates: Create → Link → Test</td>
+                    </tr>
+                    <tr>
+                        <td><strong>14</strong></td>
+                        <td>Test GPO Replication Status</td>
+                        <td>Checks if GPO has replicated to all Domain Controllers</td>
+                    </tr>
+                </table>
+                
+                <div class="info-box">
+                    <h4>💡 Understanding Local vs. Domain Configuration</h4>
+                    <p><strong>Local Configuration (Options 6-8):</strong> Affects ONLY the server where the script is running. Useful for testing before deploying via GPO.</p>
+                    <p><strong>Domain Configuration (Options 9-14):</strong> Creates/manages GPOs that will be applied to ALL servers in the linked Organizational Units. This is the recommended approach for enterprise environments.</p>
+                </div>
+                
+                <h3>Typical ENTERPRISE MODE Workflow</h3>
+                <div class="workflow-diagram">
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 3: Load XML</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 20: Preview Changes</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 8: Test Local</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 17: Backup</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Option 13: Apply Complete GPO</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div>
+                        <div class="workflow-step">Option 14: Test Replication</div>
+                    </div>
+                </div>
+                
+                <h3>GPO Deployment Best Practices</h3>
+                <div class="success-box">
+                    <ol>
+                        <li><strong>Test Locally First:</strong> Use Option 8 to test on a single server before deploying via GPO</li>
+                        <li><strong>Use Staging OU:</strong> Link GPO to a test OU first, verify functionality, then expand</li>
+                        <li><strong>Monitor Replication:</strong> Use Option 14 to ensure GPO has replicated to all DCs</li>
+                        <li><strong>Force Group Policy Update:</strong> Run <code>gpupdate /force</code> on target servers after linking</li>
+                        <li><strong>Document Changes:</strong> Use Option 16 to generate HTML reports before and after deployment</li>
+                    </ol>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            <!-- EXAMPLES SECTION -->
+            <section id="examples">
+                <h2>💻 Advanced Examples <span class="badge badge-optional">💡 OPTIONAL</span></h2>
+                
+                <p><em>For basic usage, see <a href="#quickstart">Quick Start</a>. This section covers advanced scenarios.</em></p>
+                
+                <h3>Pre-loading Configuration & Custom Logging</h3>
+                <div class="code-block">
+<span class="comment"># Run with both config file and date-stamped log</span>
+<span class="prompt">PS C:\temp\></span> .\Network-Security-Utility.ps1 `
+    -ConfigFile "C:\temp\IPsecConfig.xml" `
+    -LogFile "C:\temp\logs\IPsec-$(Get-Date -Format 'yyyyMMdd').log"
+                </div>
+                
+                <h3>Automation Considerations</h3>
+                <div class="info-box">
+                    <p><strong>Note:</strong> Current version is interactive only. For scheduled/automated deployments:</p>
+                    <ul>
+                        <li>Create wrapper scripts that call specific utility functions</li>
+                        <li>Use Task Scheduler with PowerShell transcript logging</li>
+                        <li>Review logs in <code>C:\temp\logs\</code> directory</li>
+                    </ul>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+            
+            <!-- TROUBLESHOOTING SECTION -->
+            <section id="troubleshooting">
+                <h2>🔧 Troubleshooting Guide <span class="badge badge-required">⚡ WHEN NEEDED</span></h2>
+                
+                <h3>Common Issues & Solutions</h3>
+                
+                <h4>Issue 1: Script Won't Run - Execution Policy</h4>
+                <p><strong>Quick Fix:</strong> <code>Set-ExecutionPolicy RemoteSigned</code> (run as Administrator)</p>
+                <details>
+                    <summary>Click for detailed steps ▼</summary>
+                    <div class="error-box">
+                        <p><strong>Error:</strong> "File cannot be loaded because running scripts is disabled on this system"</p>
+                        <p><strong>Solution:</strong></p>
+                        <div class="code-block">
+<span class="comment"># Run PowerShell as Administrator</span>
+<span class="prompt">PS C:\></span> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+
+<span class="comment"># Verify the change</span>
+<span class="prompt">PS C:\></span> Get-ExecutionPolicy
+RemoteSigned
+                        </div>
+                    </div>
+                </details>
+                
+                <h4>Issue 2: Access Denied / Insufficient Permissions</h4>
+                <p><strong>Quick Fix:</strong> Run PowerShell as Administrator (right-click → "Run as Administrator")</p>
+                <details>
+                    <summary>Click for detailed steps ▼</summary>
+                    <div class="error-box">
+                        <p><strong>Error:</strong> Access denied when creating IPsec rules</p>
+                        <p><strong>Solution:</strong> Ensure you're running PowerShell as Administrator</p>
+                        <ol>
+                            <li>Right-click PowerShell icon</li>
+                            <li>Select "Run as Administrator"</li>
+                            <li>Navigate to script directory and run again</li>
+                        </ol>
+                    </div>
+                </details>
+                
+                <h4>Issue 3: GroupPolicy Module Not Found (ENTERPRISE MODE)</h4>
+                <p><strong>Quick Fix:</strong> <code>Install-WindowsFeature GPMC</code> (requires Administrator)</p>
+                <details>
+                    <summary>Click for detailed steps ▼</summary>
+                    <div class="error-box">
+                        <p><strong>Error:</strong> "GroupPolicy PowerShell module not installed"</p>
+                        <p><strong>Solution:</strong></p>
+                        <div class="code-block">
+<span class="comment"># Install Group Policy Management Console</span>
+<span class="prompt">PS C:\></span> Install-WindowsFeature GPMC
+
+<span class="comment"># Verify installation</span>
+<span class="prompt">PS C:\></span> Get-Module -ListAvailable GroupPolicy
+                        </div>
+                    </div>
+                </details>
+                
+                <h4>Issue 4: IPsec Not Working After Deployment</h4>
+                <p><strong>Quick Fix:</strong> Check Security Associations (Option 3) and review IKE events (Option 18)</p>
+                <details>
+                    <summary>Click for full diagnostic checklist ▼</summary>
+                    <div class="warning-box">
+                        <p><strong>Problem:</strong> Configuration applied but no IPsec connectivity</p>
+                        <p><strong>Diagnostic Steps:</strong></p>
+                        <ol>
+                            <li><strong>Check SA Formation:</strong> Option 3 - Look for active Security Associations</li>
+                            <li><strong>Review Events:</strong> Option 18 - Check for IKE negotiation failures</li>
+                            <li><strong>Verify Certificates:</strong> Option 19 - Ensure certs are valid and not expired</li>
+                            <li><strong>Test Connectivity:</strong> Option 17 - Test to specific remote host</li>
+                            <li><strong>Check Firewall:</strong> Ensure UDP 500 and UDP 4500 are allowed</li>
+                            <li><strong>Verify Time Sync:</strong> Kerberos auth requires time within 5 minutes</li>
+                        </ol>
+                    </div>
+                </details>
+                
+                <h4>Issue 5: GPO Not Applying to Servers</h4>
+                <p><strong>Quick Fix:</strong> Run <code>gpupdate /force</code> on target servers and verify GPO link (Option 9)</p>
+                <details>
+                    <summary>Click for full troubleshooting checklist ▼</summary>
+                    <div class="warning-box">
+                        <p><strong>Problem:</strong> Created GPO but servers not receiving settings</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ol>
+                            <li><strong>Check GPO Link:</strong> Option 9 - Verify GPO is linked to correct OU</li>
+                            <li><strong>Test Replication:</strong> Option 14 - Ensure GPO replicated to all DCs</li>
+                            <li><strong>Force Update on Clients:</strong> Run <code>gpupdate /force</code> on target servers</li>
+                            <li><strong>Check OU Membership:</strong> Verify servers are in the linked OU</li>
+                            <li><strong>Review GPO Filtering:</strong> Check security filtering and WMI filters</li>
+                        </ol>
+                    </div>
+                </details>
+                
+                <h3>Useful PowerShell Commands</h3>
+                <div class="code-block">
+<span class="comment"># Check current IPsec rules</span>
+<span class="prompt">PS C:\></span> Get-NetIPsecRule | Format-Table DisplayName, Enabled
+
+<span class="comment"># View Security Associations</span>
+<span class="prompt">PS C:\></span> Get-NetIPsecMainModeSA
+<span class="prompt">PS C:\></span> Get-NetIPsecQuickModeSA
+
+<span class="comment"># Check Windows Firewall status</span>
+<span class="prompt">PS C:\></span> Get-NetFirewallProfile
+
+<span class="comment"># Force Group Policy update</span>
+<span class="prompt">PS C:\></span> gpupdate /force
+
+<span class="comment"># View applied GPOs</span>
+<span class="prompt">PS C:\></span> gpresult /R
+
+<span class="comment"># Test network connectivity</span>
+<span class="prompt">PS C:\></span> Test-NetConnection -ComputerName RemoteServer -Port 445
+                </div>
+                
+                <h3>Getting Help</h3>
+                <div class="info-box">
+                    <p><strong>Built-in Help:</strong></p>
+                    <ul>
+                        <li>All functions include detailed logging</li>
+                        <li>Log files created automatically in script directory</li>
+                        <li>Use Option 13/16 to generate HTML reports</li>
+                        <li>Check <code>BACKUP-MANIFEST.txt</code> in backup directories for restore instructions</li>
+                    </ul>
+                </div>
+                <a href="#top" class="back-to-top">↑ Back to Top</a>
+            </section>
+        </div>
+        
+        <footer>
+            <h3>📚 Additional Resources</h3>
+            <p>For more information about IPsec and Windows Server security:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li>📖 <a href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/ipsec/" target="_blank" style="color: rgba(255,255,255,0.9); text-decoration: underline;">Microsoft Docs: IPsec Configuration</a></li>
+                <li>📖 <a href="https://learn.microsoft.com/en-us/windows-server/security/security-and-assurance" target="_blank" style="color: rgba(255,255,255,0.9); text-decoration: underline;">Windows Server Security Guide</a></li>
+                <li>📖 <a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/best-practices-for-securing-active-directory" target="_blank" style="color: rgba(255,255,255,0.9); text-decoration: underline;">Group Policy & Active Directory Best Practices</a></li>
+                <li>📖 <a href="https://learn.microsoft.com/en-us/powershell/module/netsecurity/" target="_blank" style="color: rgba(255,255,255,0.9); text-decoration: underline;">PowerShell NetSecurity Module Reference</a></li>
+            </ul>
+            <p style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
+                <strong>Network Security Utility v2.0</strong><br>
+                Administrator Guide<br>
+                Last Updated: November 2025
+            </p>
+            
+            <p style="font-size: 0.9em; opacity: 0.8; margin-top: 10px;">
+                © 2025 - For ThyssenKrupp Steel & DXC Technology<br>
+                This guide covers LOCAL MODE (20 options) and ENTERPRISE MODE (20 options)
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

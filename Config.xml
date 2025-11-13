@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+	<Solution>ESAE</Solution>
+	<ESAEDomain>
+		<TMVersion>Latest</TMVersion>
+		<DoNotRunonAzure>Yes</DoNotRunonAzure>
+		<NetBIOSName>steelsec</NetBIOSName>
+		<FQDNName>steelsec.se.office</FQDNName>
+		<DN>DC=steelsec,DC=se,DC=office</DN>
+		<SafeModeAdminPassword>Start123!Start123!</SafeModeAdminPassword>
+		<DC1Name>HF-p01-dc01</DC1Name>
+		<DC2Name>HF-p01-dc02</DC2Name>
+		<WSUSName>HF-p01-wsus01</WSUSName>
+		<CAName>HF-p01-ca01</CAName>
+		<CDP1Name>none</CDP1Name>
+		<RD1Name>jump-p01-rds01</RD1Name>
+		<RD2Name>none</RD2Name>
+		<RD3Name>none</RD3Name>
+		<RDS1Name>none</RDS1Name>
+		<AVDHostName1>tbd</AVDHostName1>
+		<AVDHostName2>tbd</AVDHostName2>
+		<AVDHostName3>tbd</AVDHostName3>
+		<AVDHostName4>tbd</AVDHostName4>
+		<BG1Name>tbd</BG1Name>
+		<SMTPFQDN>smtp.contoso.com</SMTPFQDN>
+		<SMTPMail>alert@contoso.com</SMTPMail>
+		<TimeZoneSelector>(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</TimeZoneSelector>
+		<TimeZone>110</TimeZone>
+		<TimeZoneName>W. Europe Standard Time</TimeZoneName>
+		<LCID>en-US</LCID>
+		<KeyboardLayout>0409:00000409</KeyboardLayout>
+		<DGWIP>10.169.13.33</DGWIP>
+		<SubnetMask>255.255.255.0</SubnetMask>
+		<Subnet>10.169.13.32</Subnet>
+		<Prefix>27</Prefix>
+		<DC1IP>10.169.13.36</DC1IP>
+		<DC2IP>10.169.13.37</DC2IP>
+		<RD1IP>10.169.13.6</RD1IP>
+		<HV2IP>1.2.3.4</HV2IP>
+		<MDTWSUS>no</MDTWSUS>
+		<MDTDHCPStartIP>1.2.3.4</MDTDHCPStartIP>
+		<MDTDHCPEndIP>1.2.3.4</MDTDHCPEndIP>
+		<WEFIP>1.2.3.4</WEFIP>
+		<HV1IP>1.2.3.4</HV1IP>
+		<WSUSIP>10.169.13.38</WSUSIP>
+		<SQLIP>1.2.3.4</SQLIP>
+		<SCOMIP>1.2.3.4</SCOMIP>
+		<AVDHost1IP>tbd</AVDHost1IP>
+		<AVDHost2IP>tbd</AVDHost2IP>
+		<AVDHost3IP>tbd</AVDHost3IP>
+		<AVDHost4IP>tbd</AVDHost4IP>
+		<RDBG1IP>10.169.13.6</RDBG1IP>
+		<CAIP>10.169.13.39</CAIP>
+		<DomainJoinIP>10.169.13.7</DomainJoinIP>
+		<SmartCardDriver>No</SmartCardDriver>
+		<CAValidity>16</CAValidity>
+		<CAKeyLength>2048</CAKeyLength>
+		<CACryptoProvider>RSA#Microsoft Software Key Storage Provider</CACryptoProvider>
+		<CAHashAlgorithm>sha384</CAHashAlgorithm>
+		<CACertValidity>2</CACertValidity>
+		<CAPathLength>0</CAPathLength>
+		<CACRLPeriodUnits>26</CACRLPeriodUnits>
+		<CACRLPeriod>Weeks</CACRLPeriod>
+		<CACRLDeltaPeriodUnits>0</CACRLDeltaPeriodUnits>
+		<CACRLDeltaPeriod>Days</CACRLDeltaPeriod>
+		<CACDP>1:C:\CAConfig\%3%8.crl\n3:ldap:///CN=%7,CN=%2,CN=CDP,CN=Public Key Services,CN=services,%6%10</CACDP>
+		<CAAIA>1:C:\CAConfig\%3%4.crt\n0:ldap:///CN=%7,CN=AIA,CN=Public Key Services,CN=Services,%6%11</CAAIA>
+		<CAPath>DC=office,DC=se,DC=steelsec,CN=steelsec Enterprise Root CA</CAPath>
+		<GPOPrefix>N/A</GPOPrefix>
+		<ESAEBaseOU>Admin</ESAEBaseOU>
+		<ESAEHVOU>HF-Hosts</ESAEHVOU>
+		<ESAEServersOU>T0-Servers</ESAEServersOU>
+		<ESAEWSUSOU>T0-WSUS</ESAEWSUSOU>
+		<ESAECAOU>HF-CA</ESAECAOU>
+		<ESAESCOMOU>T0-SCOM</ESAESCOMOU>
+		<ESAESQLOU>HF-SQL</ESAESQLOU>
+		<ESAEHGSOU>HF-HGS</ESAEHGSOU>
+		<ESAEProdAdminOU>Production Administration</ESAEProdAdminOU>
+		<ESAEAdminDesktopOU>T0-Devices</ESAEAdminDesktopOU>
+		<ESAEGroupsOU>T0-Groups</ESAEGroupsOU>
+		<ESAEServiceAccountsOU>T0-ServiceAccounts</ESAEServiceAccountsOU>
+		<ESAEStagingOU>Staging</ESAEStagingOU>
+		<WSUSFQDN>HF-p01-wsus01.steelsec.se.office</WSUSFQDN>
+		<IPsecTemplate>steelsec Online IPsec</IPsecTemplate>
+		<KerbAuthTemplate>steelsec Kerberos</KerbAuthTemplate>
+		<SCLogonTemplate>steelsec SmartCard Logon</SCLogonTemplate>
+		<IntForIPsecTemplate>steelsec Offline IPsec</IntForIPsecTemplate>
+		<SCOMGWTemplate>steelsec SCOM GW</SCOMGWTemplate>
+		<HGSTemplate>steelsec HGS</HGSTemplate>
+		<LGSSigningTemplate>steelsec LGS Signing</LGSSigningTemplate>
+		<LGSEncryptionTemplate>steelsec LGS Encryption</LGSEncryptionTemplate>
+		<OfflineCodeSigningTemplate>steelsec Offline Code Signing</OfflineCodeSigningTemplate>
+		<OfflineWebServerTemplate>steelsec Offline Web Server</OfflineWebServerTemplate>
+		<RedCardAdminsGroup Name="Red Card Admins" SamAccountName="RedCardAdmins"/>
+		<GoldCardAdminsGroup Name="Gold Card Admins" SamAccountName="GoldCardAdmins"/>
+		<WhiteCardAdminsGroup Name="White Card Admins" SamAccountName="WhiteCardAdmins"/>
+		<BreakGlassAdminsGroup Name="Break Glass Admins" SamAccountName="BreakGlassAdmins"/>
+		<MGMTServersGroup Name="MGMT Servers" SamAccountName="MGMTServers"/>
+		<IPsec>
+			<Global>
+				<IPsecCrlCheck>None</IPsecCrlCheck>
+				<IPsecExemptions>Icmp</IPsecExemptions>
+				<IPsecEncapsulation>AH,ESP</IPsecEncapsulation>
+				<IPsecKeyExchange>DH20</IPsecKeyExchange>
+				<IPsecQMHash>AESGMAC256</IPsecQMHash>
+				<IPsecMMHash>sha384</IPsecMMHash>
+				<IPsecQMEncryption>AESGCM256</IPsecQMEncryption>
+				<IPsecMMEncryption>AES256</IPsecMMEncryption>
+				<IPsecKeyModule>Default</IPsecKeyModule>
+				<IPsecMaxSessions>1</IPsecMaxSessions>
+			</Global>
+			<Rules>
+				<Rule Name="steelsec-Forest-ANY-ANY-Isolation" Inbound="Require" Outbound="Require" LocalAddress="ANY" RemoteAddress="ANY" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec Domain IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-AzureDNS-Exception" Inbound="Request" Outbound="Request" LocalAddress="ANY" RemoteAddress="168.63.129.16" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec AzureDNS IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-AzureKMS-Exception" Inbound="Require" Outbound="Request" LocalAddress="ANY" RemoteAddress="23.102.135.246" LocalPort="ANY" RemotePort="1688" Protocol="TCP" GPO="steelsec.se.office\steelsec AzureKMS IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-AzureServices-Exception" Inbound="Require" Outbound="Request" LocalAddress="ANY" RemoteAddress="ANY" LocalPort="ANY" RemotePort="80,443,445" Protocol="TCP" GPO="steelsec.se.office\steelsec Azure Services IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-JumpServer-from-PAW-RDP-Exception" Inbound="Request" Outbound="Request" LocalAddress="10.169.13.0/27,10.169.13.64/27" RemoteAddress="10.169.11.0/24" LocalPort="3389" RemotePort="ANY" Protocol="TCP" GPO="steelsec.se.office\steelsec JumpServer PAW RDP IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-DCs-from-PAW-NLA-TCP-Exception" Inbound="Request" Outbound="Request" LocalAddress="10.169.13.36,10.169.13.37" RemoteAddress="10.169.11.0/24" LocalPort="53,88,389" RemotePort="ANY" Protocol="TCP" GPO="steelsec.se.office\steelsec DCs PAW NLA IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-DCs-from-PAW-NLA-UDP-Exception" Inbound="Request" Outbound="Request" LocalAddress="10.169.13.36,10.169.13.37" RemoteAddress="10.169.11.0/24" LocalPort="53,88,389" RemotePort="ANY" Protocol="UDP" GPO="steelsec.se.office\steelsec DCs PAW NLA IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-Emergency-JumpServer-Exception" Inbound="Request" Outbound="Request" LocalAddress="10.169.13.32/27" RemoteAddress="10.169.13.10" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec Emergency JumpServer IPsec Policy" Location="steelsec.se.office"/>
+				<Rule Name="steelsec-Forest-JumpServer-JoinIP-Exception" Inbound="Request" Outbound="Request" LocalAddress="10.169.13.0/27" RemoteAddress="10.169.13.70" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec JoinIP IPsec Policy" Location="T0-RDS"/>
+				<Rule Name="steelsec-Forest-JumpServer-DUI-HTTPS-Exception" Inbound="Require" Outbound="Request" LocalAddress="10.169.13.0/27" RemoteAddress="10.140.1.140,10.140.1.197,10.140.1.198,10.140.1.200,10.140.1.201" LocalPort="ANY" RemotePort="80,443" Protocol="TCP" GPO="steelsec.se.office\steelsec ILO ESXI HTTPS IPsec Policy" Location="T0-RDS"/>
+				<Rule Name="steelsec-Forest-JumpServer-FRA-HTTPS-Exception" Inbound="Require" Outbound="Request" LocalAddress="10.169.13.0/27" RemoteAddress="10.6.69.20,10.6.70.198,10.6.70.199,10.6.70.200,10.6.70.201,10.6.70.202,10.6.70.203,10.6.70.204,10.6.70.205,10.6.70.206,10.6.70.244" LocalPort="ANY" RemotePort="80,443" Protocol="TCP" GPO="steelsec.se.office\steelsec ILO ESXI HTTPS IPsec Policy" Location="T0-RDS"/>
+				<Rule Name="steelsec-Forest-to-HSM-Exception" Inbound="Require" Outbound="Request" LocalAddress="10.169.13.39" RemoteAddress="10.140.1.150,10.6.69.14" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec Forest to HSM IPsec Policy" Location="T0-PKI"/>
+				<Rule Name="steelsec-Forest-RDSFarm-Endpoint-Isolation" Inbound="Require" Outbound="Require" LocalAddress="10.169.13.64/27" RemoteAddress="10.169.13.0/27,10.169.13.32/27" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec RDSFarm HF IPsec Policy" Location="T0-RDSFarm"/>
+				<Rule Name="steelsec-Forest-RDSFarm-Endpoint-Exception" Inbound="Request" Outbound="Request" LocalAddress="10.169.13.64/27" RemoteAddress="10.169.13.96/27" LocalPort="ANY" RemotePort="ANY" Protocol="ANY" GPO="steelsec.se.office\steelsec RDSFarm IPsec Policy Exception" Location="T0-RDSFarm"/>
+                                <Rule Name="steelsec-Forest-JumpServer-DataTurnTable-SMB-Exception" Inbound="Require" Outbound="Request" LocalAddress="10.169.13.0/27" RemoteAddress="10.6.66.140" LocalPort="ANY" RemotePort="445" Protocol="TCP" GPO="steelsec.se.office\steelsec DataTurnTable SMB IPsec Exception" Location="T0-RDS"/>
+			</Rules>
+		</IPsec>
+	</ESAEDomain>
+	<Azure>
+		<TenantBGAdmin1>bg01@steelsec.onmicrosoft.com</TenantBGAdmin1>
+		<TenantBGAdmin2>bg02@steelsec.onmicrosoft.com</TenantBGAdmin2>
+		<RootMgmtGroupName>none</RootMgmtGroupName>
+		<HFMgmtGroupName>none</HFMgmtGroupName>
+		<T0MgmtGroupName>none</T0MgmtGroupName>
+		<ResourceGroup>Sec-HF-p01</ResourceGroup>
+		<ResourceGroupHFADS>Sec-HF-p01</ResourceGroupHFADS>
+		<ResourceGroupHFRDP>Sec-HF-p01</ResourceGroupHFRDP>
+		<ResourceGroupHFNET>Sec-HF-p01</ResourceGroupHFNET>
+		<ResourceGroupHFLOG>Sec-HF-p01</ResourceGroupHFLOG>
+		<ResourceGroupHFBAK>Sec-HF-p01</ResourceGroupHFBAK>
+		<ResourceGroupT0NET>none</ResourceGroupT0NET>
+		<ResourceGroupT0LOG>NetworkWatcherRG</ResourceGroupT0LOG>
+		<VNetHFName>Sec-Network-p01</VNetHFName>
+		<VNetHFIPRange>10.169.13.0/24</VNetHFIPRange>
+		<VFNetAFName>Sec-vWANHub-p01</VFNetAFName>
+		<VFNetAFIPRange>10.169.15.0/24</VFNetAFIPRange>
+		<SubnetHFName>HF-p01</SubnetHFName>
+		<SubnetHFIPRange>10.169.13.32/27</SubnetHFIPRange>
+		<SubnetRDAName>RDS-p01</SubnetRDAName>
+		<SubnetRDAIPRange>10.169.13.0/27</SubnetRDAIPRange>
+		<SubnetGWName>GatewaySubnet</SubnetGWName>
+		<SubnetGWIPRange>none</SubnetGWIPRange>
+		<P2SSubnetIPRange>10.169.11.0/24</P2SSubnetIPRange>
+		<SubnetPEName>Sec-Network-p01</SubnetPEName>
+		<SubnetPEIPRange>10.169.13.0/24</SubnetPEIPRange>
+		<NSGADSubnet>Sec-HF-p01</NSGADSubnet>
+		<NSGRDASubnet>Sec-HF-p01</NSGRDASubnet>
+		<NSGAFWSubnet>Sec-HF-p01</NSGAFWSubnet>
+		<NSGPESubnet>Sec-HF-p01</NSGPESubnet>
+		<RouteTable1>Sec-Network-GW-p01</RouteTable1>
+		<VPNGWName1>Sec-Network-vWAN-p01</VPNGWName1>
+		<VPNGWPIPName1>none</VPNGWPIPName1>
+		<ERGWName1>er_se_ams</ERGWName1>
+		<ERGWPIPName1>er_se_ams-pip001</ERGWPIPName1>
+		<ERCircuitName1>none</ERCircuitName1>
+		<LAWorkspace1>tbd</LAWorkspace1>
+		<StorageAccountDiag>none</StorageAccountDiag>
+		<StorageAccountFileShare>sasteelsec</StorageAccountFileShare>
+		<StorageAccountCRL>none</StorageAccountCRL>
+		<StorageAccountAVD>none</StorageAccountAVD>
+		<StorageAccountNSG>none</StorageAccountNSG>
+		<AZFName1>tbd</AZFName1>
+		<AZFPIPName1>tbd</AZFPIPName1>
+		<AKVName1>none</AKVName1>
+		<AutomationAccountName1>none</AutomationAccountName1>
+		<RecoverServicesVaultName1>none</RecoverServicesVaultName1>
+		<PEStorageAccountLogs>none</PEStorageAccountLogs>
+		<PEStorageAccountFileShare>none</PEStorageAccountFileShare>
+		<PEStorageAccountCRL>none</PEStorageAccountCRL>
+		<PEStorageAccountAVDFileShare>none</PEStorageAccountAVDFileShare>
+		<AMPLS1>none</AMPLS1>
+		<PEAzureMonitor1>none</PEAzureMonitor1>
+		<PEAzureKeyVault1>none</PEAzureKeyVault1>
+		<PEAutomationAccount1>none</PEAutomationAccount1>
+		<PEAzureBackup1>none</PEAzureBackup1>
+		<PEAzureBackup2>none</PEAzureBackup2>
+		<IPGroupName1>none</IPGroupName1>
+		<IPGroupName2>none</IPGroupName2>
+		<vmSizeDC01>Standard_D2s_V3</vmSizeDC01>
+		<vmSizeDC02>Standard_D2s_V3</vmSizeDC02>
+		<vmSizeRD01>Standard_D2s_V3</vmSizeRD01>
+		<vmSizeAVDHost01>Standard_D2s_V3</vmSizeAVDHost01>
+		<vmSizeAVDHost02>Standard_D2s_V3</vmSizeAVDHost02>
+		<vmSizeAVDHost03>Standard_D2s_V3</vmSizeAVDHost03>
+		<vmSizeAVDHost04>Standard_D2s_V3</vmSizeAVDHost04>
+		<vmSizeCA01>Standard_D2s_V3</vmSizeCA01>
+		<WSUS80Port>8080</WSUS80Port>
+	</Azure>
+	<ProductionDomains>
+		<domain>
+			<Name>STEELEUROPE</Name>
+			<FQDN>steeleurope.com</FQDN>
+			<HyperVName>none</HyperVName>
+			<WEF1Name>none</WEF1Name>
+			<SCOMGWName>none</SCOMGWName>
+			<DnsIpAddresses>10.140.1.132,10.6.69.6,10.6.69.7,10.6.69.11,10.6.69.12,10.140.1.136</DnsIpAddresses>
+			<Administrator>Administrator</Administrator>
+		</domain>
+		<domain>
+			<Name>none</Name>
+			<FQDN>none</FQDN>
+			<HyperVName>none</HyperVName>
+			<WEF1Name>none</WEF1Name>
+			<SCOMGWName>none</SCOMGWName>
+			<SCOMGWName>none</SCOMGWName>
+			<DnsIpAddresses>none</DnsIpAddresses>
+			<Administrator>Administrator</Administrator>
+		</domain>
+		<domain>
+			<Name>none</Name>
+			<FQDN>none</FQDN>
+			<HyperVName>none</HyperVName>
+			<WEF1Name>none</WEF1Name>
+			<SCOMGWName>none</SCOMGWName>
+			<SCOMGWName>none</SCOMGWName>
+			<DnsIpAddresses>none</DnsIpAddresses>
+			<Administrator>none</Administrator>
+		</domain>
+	</ProductionDomains>
+</Settings>
+
