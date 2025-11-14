@@ -1,0 +1,14 @@
+{
+    // Disable HTML inline style warnings for this project
+    // The HTML administrator guide is designed to be a self-contained,
+    // portable file with no external dependencies
+    "html.validate.styles": false,
+    
+    // PowerShell settings
+    "powershell.codeFormatting.preset": "OTBS",
+    "files.associations": {
+        "*.ps1": "powershell",
+        "*.psm1": "powershell",
+        "*.psd1": "powershell"
+    }
+}

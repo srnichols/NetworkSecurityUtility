@@ -3382,7 +3382,6 @@ function Invoke-CreateUpdateGPOs {
                 Pause-ForUser
                 return
             }
-            $isUpdate = $true
             $targetGPO = $existingGPO
         } else {
             # Create new GPO
@@ -4035,7 +4034,6 @@ function Invoke-ApplyCompleteGPO {
                 Pause-ForUser
                 return
             }
-            $isUpdate = $true
             $targetGPO = $existingGPO
         } else {
             # Create new GPO
@@ -6287,7 +6285,7 @@ function Invoke-ImportADIPsec {
     Write-Log "Running in WhatIf mode (preview only)..." -Type Info
     Write-Log "" -NoFile
     
-    $result = Import-ADIPsecConfiguration -SourceXML $sourceXML -TargetDomain $targetDomain -WhatIf
+    Import-ADIPsecConfiguration -SourceXML $sourceXML -TargetDomain $targetDomain -WhatIf
     
     Pause-ForUser
 }
