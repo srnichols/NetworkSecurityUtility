@@ -1213,6 +1213,509 @@ function Show-CurrentConfiguration {
 
 #endregion
 
+#region Active Directory IPsec Migration
+
+<#
+    Functions for reading IPsec settings from Active Directory IP Security container
+    and migrating them between domains. This addresses the domain-to-domain IPsec
+    configuration migration scenario.
+#>
+
+function Export-ADIPsecConfiguration {
+    <#
+    .SYNOPSIS
+        Exports IPsec configuration from Active Directory IP Security container.
+    .DESCRIPTION
+        Reads IPsec policies, filter lists, and negotiation policies from the
+        CN=IP Security container in Active Directory and exports them to XML format.
+        This function reads the raw AD objects that define IPsec policies at the
+        domain level.
+    .PARAMETER SourceDomain
+        FQDN of the source domain (e.g., contoso.com). If not specified, uses current domain.
+    .PARAMETER OutputPath
+        Path where the exported XML file will be saved.
+    .PARAMETER Credential
+        PSCredential object for accessing the source domain (optional).
+    .OUTPUTS
+        XML file containing the complete IPsec configuration from AD.
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]$SourceDomain,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$OutputPath,
+        
+        [Parameter(Mandatory=$false)]
+        [System.Management.Automation.PSCredential]$Credential
+    )
+    
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "EXPORT IPSEC CONFIGURATION FROM ACTIVE DIRECTORY" -Type Title
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "" -NoFile
+    
+    try {
+        # Import Active Directory module
+        if (-not (Get-Module -Name ActiveDirectory -ListAvailable)) {
+            Write-Log "ERROR: ActiveDirectory module not available" -Type Error
+            Write-Log "Install with: Install-WindowsFeature RSAT-AD-PowerShell" -Type Info
+            return $null
+        }
+        
+        Import-Module ActiveDirectory -ErrorAction Stop
+        
+        # Get domain DN
+        if ([string]::IsNullOrWhiteSpace($SourceDomain)) {
+            $domainDN = (Get-ADDomain).DistinguishedName
+            $SourceDomain = (Get-ADDomain).DNSRoot
+        } else {
+            $domainDN = "DC=" + ($SourceDomain -replace '\.', ',DC=')
+        }
+        
+        Write-Log "Source Domain: $SourceDomain" -Type Info
+        Write-Log "Domain DN: $domainDN" -Type Info
+        Write-Log "" -NoFile
+        
+        # Construct IP Security container path
+        $ipSecContainerDN = "CN=IP Security,CN=System,$domainDN"
+        
+        Write-Log "Reading from: $ipSecContainerDN" -Type Info
+        Write-Log "" -NoFile
+        
+        # Build AD query parameters
+        $adParams = @{
+            'SearchBase' = $ipSecContainerDN
+            'SearchScope' = 'OneLevel'
+            'Properties' = '*'
+            'ErrorAction' = 'Stop'
+        }
+        
+        if ($Credential) {
+            $adParams['Credential'] = $Credential
+            if ($SourceDomain) {
+                $adParams['Server'] = $SourceDomain
+            }
+        }
+        
+        # Read all IPsec objects from AD
+        Write-Log "Querying IPsec policies..." -Type Info
+        $ipsecPolicies = Get-ADObject @adParams -Filter "objectClass -eq 'ipsecPolicy'"
+        Write-Log "  Found $($ipsecPolicies.Count) IPsec policies" -Type Success
+        
+        Write-Log "Querying IPsec filter lists..." -Type Info
+        $ipsecFilters = Get-ADObject @adParams -Filter "objectClass -eq 'ipsecFilter'"
+        Write-Log "  Found $($ipsecFilters.Count) IPsec filters" -Type Success
+        
+        Write-Log "Querying IPsec negotiation policies..." -Type Info
+        $ipsecNegotiationPolicies = Get-ADObject @adParams -Filter "objectClass -eq 'ipsecNegotiationPolicy'"
+        Write-Log "  Found $($ipsecNegotiationPolicies.Count) negotiation policies" -Type Success
+        
+        Write-Log "Querying IPsec NFA (Network Filter Actions)..." -Type Info
+        $ipsecNFAs = Get-ADObject @adParams -Filter "objectClass -eq 'ipsecNFA'"
+        Write-Log "  Found $($ipsecNFAs.Count) NFAs" -Type Success
+        
+        Write-Log "Querying IPsec ISAKMP policies..." -Type Info
+        $ipsecISAKMP = Get-ADObject @adParams -Filter "objectClass -eq 'ipsecISAKMPPolicy'"
+        Write-Log "  Found $($ipsecISAKMP.Count) ISAKMP policies" -Type Success
+        
+        Write-Log "" -NoFile
+        
+        # Build XML structure
+        Write-Log "Building XML configuration..." -Type Info
+        
+        $xmlContent = @"
+<?xml version="1.0" encoding="UTF-8"?>
+<IPsecADExport>
+    <ExportInfo>
+        <ExportDate>$(Get-Date -Format "yyyy-MM-dd HH:mm:ss")</ExportDate>
+        <SourceDomain>$SourceDomain</SourceDomain>
+        <SourceDN>$ipSecContainerDN</SourceDN>
+        <ExportedBy>$env:USERNAME</ExportedBy>
+        <ExportedFrom>$env:COMPUTERNAME</ExportedFrom>
+    </ExportInfo>
+    <Policies>
+"@
+        
+        # Add IPsec Policies
+        foreach ($policy in $ipsecPolicies) {
+            $xmlContent += @"
+
+        <ipsecPolicy>
+            <Name>$([System.Security.SecurityElement]::Escape($policy.Name))</Name>
+            <DN>$([System.Security.SecurityElement]::Escape($policy.DistinguishedName))</DN>
+"@
+            # Add all properties
+            foreach ($prop in $policy.PSObject.Properties) {
+                if ($prop.Value -and $prop.Name -notin @('PropertyNames', 'AddedProperties', 'RemovedProperties', 'ModifiedProperties', 'PropertyCount')) {
+                    $escapedValue = [System.Security.SecurityElement]::Escape($prop.Value.ToString())
+                    $xmlContent += "            <$($prop.Name)>$escapedValue</$($prop.Name)>`n"
+                }
+            }
+            $xmlContent += "        </ipsecPolicy>`n"
+        }
+        
+        $xmlContent += "    </Policies>`n    <Filters>`n"
+        
+        # Add IPsec Filters
+        foreach ($filter in $ipsecFilters) {
+            $xmlContent += @"
+
+        <ipsecFilter>
+            <Name>$([System.Security.SecurityElement]::Escape($filter.Name))</Name>
+            <DN>$([System.Security.SecurityElement]::Escape($filter.DistinguishedName))</DN>
+"@
+            foreach ($prop in $filter.PSObject.Properties) {
+                if ($prop.Value -and $prop.Name -notin @('PropertyNames', 'AddedProperties', 'RemovedProperties', 'ModifiedProperties', 'PropertyCount')) {
+                    $escapedValue = [System.Security.SecurityElement]::Escape($prop.Value.ToString())
+                    $xmlContent += "            <$($prop.Name)>$escapedValue</$($prop.Name)>`n"
+                }
+            }
+            $xmlContent += "        </ipsecFilter>`n"
+        }
+        
+        $xmlContent += "    </Filters>`n    <NegotiationPolicies>`n"
+        
+        # Add Negotiation Policies
+        foreach ($negPolicy in $ipsecNegotiationPolicies) {
+            $xmlContent += @"
+
+        <ipsecNegotiationPolicy>
+            <Name>$([System.Security.SecurityElement]::Escape($negPolicy.Name))</Name>
+            <DN>$([System.Security.SecurityElement]::Escape($negPolicy.DistinguishedName))</DN>
+"@
+            foreach ($prop in $negPolicy.PSObject.Properties) {
+                if ($prop.Value -and $prop.Name -notin @('PropertyNames', 'AddedProperties', 'RemovedProperties', 'ModifiedProperties', 'PropertyCount')) {
+                    $escapedValue = [System.Security.SecurityElement]::Escape($prop.Value.ToString())
+                    $xmlContent += "            <$($prop.Name)>$escapedValue</$($prop.Name)>`n"
+                }
+            }
+            $xmlContent += "        </ipsecNegotiationPolicy>`n"
+        }
+        
+        $xmlContent += "    </NegotiationPolicies>`n    <NFAs>`n"
+        
+        # Add NFAs
+        foreach ($nfa in $ipsecNFAs) {
+            $xmlContent += @"
+
+        <ipsecNFA>
+            <Name>$([System.Security.SecurityElement]::Escape($nfa.Name))</Name>
+            <DN>$([System.Security.SecurityElement]::Escape($nfa.DistinguishedName))</DN>
+"@
+            foreach ($prop in $nfa.PSObject.Properties) {
+                if ($prop.Value -and $prop.Name -notin @('PropertyNames', 'AddedProperties', 'RemovedProperties', 'ModifiedProperties', 'PropertyCount')) {
+                    $escapedValue = [System.Security.SecurityElement]::Escape($prop.Value.ToString())
+                    $xmlContent += "            <$($prop.Name)>$escapedValue</$($prop.Name)>`n"
+                }
+            }
+            $xmlContent += "        </ipsecNFA>`n"
+        }
+        
+        $xmlContent += "    </NFAs>`n    <ISAKMPPolicies>`n"
+        
+        # Add ISAKMP Policies
+        foreach ($isakmp in $ipsecISAKMP) {
+            $xmlContent += @"
+
+        <ipsecISAKMPPolicy>
+            <Name>$([System.Security.SecurityElement]::Escape($isakmp.Name))</Name>
+            <DN>$([System.Security.SecurityElement]::Escape($isakmp.DistinguishedName))</DN>
+"@
+            foreach ($prop in $isakmp.PSObject.Properties) {
+                if ($prop.Value -and $prop.Name -notin @('PropertyNames', 'AddedProperties', 'RemovedProperties', 'ModifiedProperties', 'PropertyCount')) {
+                    $escapedValue = [System.Security.SecurityElement]::Escape($prop.Value.ToString())
+                    $xmlContent += "            <$($prop.Name)>$escapedValue</$($prop.Name)>`n"
+                }
+            }
+            $xmlContent += "        </ipsecISAKMPPolicy>`n"
+        }
+        
+        $xmlContent += "    </ISAKMPPolicies>`n</IPsecADExport>"
+        
+        # Save to file
+        Write-Log "Saving to: $OutputPath" -Type Info
+        $xmlContent | Out-File -FilePath $OutputPath -Encoding UTF8 -Force
+        
+        Write-Log "" -NoFile
+        Write-Log "Export completed successfully!" -Type Success
+        Write-Log "Total objects exported:" -Type Info
+        Write-Log "  - Policies: $($ipsecPolicies.Count)" -Type Info
+        Write-Log "  - Filters: $($ipsecFilters.Count)" -Type Info
+        Write-Log "  - Negotiation Policies: $($ipsecNegotiationPolicies.Count)" -Type Info
+        Write-Log "  - NFAs: $($ipsecNFAs.Count)" -Type Info
+        Write-Log "  - ISAKMP Policies: $($ipsecISAKMP.Count)" -Type Info
+        Write-Log "" -NoFile
+        Write-Log "File: $OutputPath" -Type Success
+        
+        return $OutputPath
+        
+    } catch {
+        Write-Log "ERROR: Failed to export IPsec configuration: $($_.Exception.Message)" -Type Error
+        Write-Log $_.ScriptStackTrace -Type Error -NoConsole
+        return $null
+    }
+}
+
+function Import-ADIPsecConfiguration {
+    <#
+    .SYNOPSIS
+        Imports IPsec configuration to Active Directory IP Security container.
+    .DESCRIPTION
+        Reads exported IPsec configuration XML and creates the corresponding
+        objects in the target domain's CN=IP Security container.
+        WARNING: This is a complex operation that requires careful validation.
+    .PARAMETER SourceXML
+        Path to the exported IPsec configuration XML file.
+    .PARAMETER TargetDomain
+        FQDN of the target domain where configuration will be imported.
+    .PARAMETER Credential
+        PSCredential object for accessing the target domain (optional).
+    .PARAMETER WhatIf
+        Preview changes without actually creating objects.
+    #>
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$SourceXML,
+        
+        [Parameter(Mandatory=$false)]
+        [string]$TargetDomain,
+        
+        [Parameter(Mandatory=$false)]
+        [System.Management.Automation.PSCredential]$Credential,
+        
+        [Parameter(Mandatory=$false)]
+        [switch]$WhatIf
+    )
+    
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "IMPORT IPSEC CONFIGURATION TO ACTIVE DIRECTORY" -Type Title
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "" -NoFile
+    
+    try {
+        # Validate source file
+        if (-not (Test-Path -Path $SourceXML)) {
+            Write-Log "ERROR: Source XML file not found: $SourceXML" -Type Error
+            return $false
+        }
+        
+        # Import Active Directory module
+        if (-not (Get-Module -Name ActiveDirectory -ListAvailable)) {
+            Write-Log "ERROR: ActiveDirectory module not available" -Type Error
+            return $false
+        }
+        
+        Import-Module ActiveDirectory -ErrorAction Stop
+        
+        # Load XML
+        Write-Log "Loading configuration from: $SourceXML" -Type Info
+        [xml]$config = Get-Content -Path $SourceXML -ErrorAction Stop
+        
+        # Get target domain DN
+        if ([string]::IsNullOrWhiteSpace($TargetDomain)) {
+            $targetDN = (Get-ADDomain).DistinguishedName
+            $TargetDomain = (Get-ADDomain).DNSRoot
+        } else {
+            $targetDN = "DC=" + ($TargetDomain -replace '\.', ',DC=')
+        }
+        
+        Write-Log "Target Domain: $TargetDomain" -Type Info
+        Write-Log "Target DN: $targetDN" -Type Info
+        Write-Log "" -NoFile
+        
+        # Display export info
+        if ($config.IPsecADExport.ExportInfo) {
+            Write-Log "Source Export Information:" -Type Info
+            Write-Log "  Export Date: $($config.IPsecADExport.ExportInfo.ExportDate)" -Type Info
+            Write-Log "  Source Domain: $($config.IPsecADExport.ExportInfo.SourceDomain)" -Type Info
+            Write-Log "  Exported By: $($config.IPsecADExport.ExportInfo.ExportedBy)" -Type Info
+        }
+        Write-Log "" -NoFile
+        
+        # Construct target IP Security container path
+        $targetIPSecDN = "CN=IP Security,CN=System,$targetDN"
+        
+        # Verify target container exists
+        try {
+            $containerExists = Get-ADObject -Identity $targetIPSecDN -ErrorAction SilentlyContinue
+            if (-not $containerExists) {
+                Write-Log "WARNING: IP Security container does not exist in target domain" -Type Warning
+                Write-Log "Container: $targetIPSecDN" -Type Info
+                
+                if (-not $WhatIf) {
+                    $create = Get-UserConfirmation -Message "Do you want to create the IP Security container?"
+                    if ($create) {
+                        # Note: Creating the container requires specific attributes
+                        Write-Log "ERROR: Automatic container creation not yet implemented" -Type Error
+                        Write-Log "Please create the container manually or contact your AD administrator" -Type Error
+                        return $false
+                    } else {
+                        return $false
+                    }
+                }
+            }
+        } catch {
+            Write-Log "ERROR: Unable to access target domain: $_" -Type Error
+            return $false
+        }
+        
+        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "IMPORT SUMMARY" -Type Title
+        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "" -NoFile
+        
+        # Count objects
+        $policyCount = if ($config.IPsecADExport.Policies.ipsecPolicy) { $config.IPsecADExport.Policies.ipsecPolicy.Count } else { 0 }
+        $filterCount = if ($config.IPsecADExport.Filters.ipsecFilter) { $config.IPsecADExport.Filters.ipsecFilter.Count } else { 0 }
+        $negPolCount = if ($config.IPsecADExport.NegotiationPolicies.ipsecNegotiationPolicy) { $config.IPsecADExport.NegotiationPolicies.ipsecNegotiationPolicy.Count } else { 0 }
+        $nfaCount = if ($config.IPsecADExport.NFAs.ipsecNFA) { $config.IPsecADExport.NFAs.ipsecNFA.Count } else { 0 }
+        $isakmpCount = if ($config.IPsecADExport.ISAKMPPolicies.ipsecISAKMPPolicy) { $config.IPsecADExport.ISAKMPPolicies.ipsecISAKMPPolicy.Count } else { 0 }
+        
+        Write-Log "Objects to import:" -Type Info
+        Write-Log "  - IPsec Policies: $policyCount" -Type Info
+        Write-Log "  - IPsec Filters: $filterCount" -Type Info
+        Write-Log "  - Negotiation Policies: $negPolCount" -Type Info
+        Write-Log "  - NFAs: $nfaCount" -Type Info
+        Write-Log "  - ISAKMP Policies: $isakmpCount" -Type Info
+        Write-Log "" -NoFile
+        
+        if ($WhatIf) {
+            Write-Log "WhatIf mode - no changes will be made" -Type Warning
+            Write-Log "" -NoFile
+            return $true
+        }
+        
+        # Confirm import
+        Write-Log "WARNING: This will create IPsec objects in Active Directory" -Type Warning
+        Write-Log "Target: $targetIPSecDN" -Type Warning
+        Write-Log "" -NoFile
+        
+        $confirm = Get-UserConfirmation -Message "Do you want to proceed with the import?"
+        if (-not $confirm) {
+            Write-Log "Import cancelled by user" -Type Info
+            return $false
+        }
+        
+        Write-Log "" -NoFile
+        Write-Log "Starting import..." -Type Info
+        Write-Log "" -NoFile
+        
+        # Note: Actual AD object creation would go here
+        # This requires careful mapping of XML properties to AD attributes
+        # and proper handling of binary attributes (ipsecData, ipsecNegotiationPolicyAction, etc.)
+        
+        Write-Log "WARNING: Full AD object creation is not yet implemented" -Type Warning
+        Write-Log "This function currently provides export/analysis capability only" -Type Warning
+        Write-Log "" -NoFile
+        Write-Log "To complete the import, you can:" -Type Info
+        Write-Log "  1. Use the exported XML to understand the source configuration" -Type Info
+        Write-Log "  2. Manually create matching policies using Group Policy Management" -Type Info
+        Write-Log "  3. Use netsh ipsec commands to script the creation" -Type Info
+        Write-Log "  4. Contact Microsoft Support for domain migration assistance" -Type Info
+        
+        return $true
+        
+    } catch {
+        Write-Log "ERROR: Failed to import IPsec configuration: $($_.Exception.Message)" -Type Error
+        Write-Log $_.ScriptStackTrace -Type Error -NoConsole
+        return $false
+    }
+}
+
+function Compare-ADIPsecConfiguration {
+    <#
+    .SYNOPSIS
+        Compares IPsec configurations between two domains.
+    .DESCRIPTION
+        Reads IPsec settings from both source and target domains and
+        identifies differences in policies, filters, and settings.
+    .PARAMETER SourceDomain
+        FQDN of source domain.
+    .PARAMETER TargetDomain
+        FQDN of target domain.
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$SourceDomain,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$TargetDomain
+    )
+    
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "COMPARE IPSEC CONFIGURATIONS" -Type Title
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "" -NoFile
+    
+    Write-Log "Source: $SourceDomain" -Type Info
+    Write-Log "Target: $TargetDomain" -Type Info
+    Write-Log "" -NoFile
+    
+    try {
+        Import-Module ActiveDirectory -ErrorAction Stop
+        
+        # Get source domain objects
+        $sourceDN = "DC=" + ($SourceDomain -replace '\.', ',DC=')
+        $sourceIPSecDN = "CN=IP Security,CN=System,$sourceDN"
+        
+        Write-Log "Reading source domain..." -Type Info
+        $sourceObjects = Get-ADObject -SearchBase $sourceIPSecDN -SearchScope OneLevel -Filter * -Properties * -Server $SourceDomain
+        
+        # Get target domain objects
+        $targetDN = "DC=" + ($TargetDomain -replace '\.', ',DC=')
+        $targetIPSecDN = "CN=IP Security,CN=System,$targetDN"
+        
+        Write-Log "Reading target domain..." -Type Info
+        $targetObjects = Get-ADObject -SearchBase $targetIPSecDN -SearchScope OneLevel -Filter * -Properties * -Server $TargetDomain
+        
+        # Compare
+        Write-Log "" -NoFile
+        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "COMPARISON RESULTS" -Type Title
+        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "" -NoFile
+        
+        # Group by object class
+        $sourceByClass = $sourceObjects | Group-Object -Property objectClass
+        $targetByClass = $targetObjects | Group-Object -Property objectClass
+        
+        Write-Log "Object Count by Type:" -Type Info
+        Write-Log "" -NoFile
+        
+        $allClasses = ($sourceByClass.Name + $targetByClass.Name) | Select-Object -Unique
+        
+        foreach ($class in $allClasses) {
+            $sourceCount = ($sourceByClass | Where-Object { $_.Name -eq $class }).Count
+            $targetCount = ($targetByClass | Where-Object { $_.Name -eq $class }).Count
+            
+            if ($sourceCount -ne $targetCount) {
+                Write-Host "  $class : " -NoNewline -ForegroundColor Yellow
+                Write-Host "Source=$sourceCount, Target=$targetCount " -ForegroundColor Red -NoNewline
+                Write-Host "[DIFFERENT]" -ForegroundColor Red
+            } else {
+                Write-Host "  $class : " -NoNewline -ForegroundColor Gray
+                Write-Host "Source=$sourceCount, Target=$targetCount " -ForegroundColor Green -NoNewline
+                Write-Host "[MATCH]" -ForegroundColor Green
+            }
+        }
+        
+        Write-Log "" -NoFile
+        Write-Log "Comparison completed" -Type Success
+        
+        return $true
+        
+    } catch {
+        Write-Log "ERROR: Comparison failed: $($_.Exception.Message)" -Type Error
+        return $false
+    }
+}
+
+#endregion
+
 #region Menu System
 
 <#
@@ -1265,10 +1768,10 @@ function Show-LocalMenu {
     
     Write-Host "LOCAL MODE - Standalone Server Configuration" -ForegroundColor $Script:Colors.Title
     Write-Host ""
-    Write-Host "INFORMATION & TESTING" -ForegroundColor $Script:Colors.Menu
+    Write-Host "INFORMATION and TESTING" -ForegroundColor $Script:Colors.Menu
     Write-Host "  1.  View Current IPsec Configuration" -ForegroundColor $Script:Colors.Menu
     Write-Host "  2.  Load/Test XML Configuration File" -ForegroundColor $Script:Colors.Menu
-    Write-Host "  3.  View IPsec Statistics & Status" -ForegroundColor $Script:Colors.Menu
+    Write-Host "  3.  View IPsec Statistics and Status" -ForegroundColor $Script:Colors.Menu
     Write-Host "  4.  Show Loaded Configuration" -ForegroundColor $Script:Colors.Menu
     Write-Host ""
     Write-Host "LOCAL CONFIGURATION" -ForegroundColor $Script:Colors.Menu
@@ -1307,11 +1810,11 @@ function Show-EnterpriseMenu {
     
     Write-Host "ENTERPRISE MODE - GPO/Active Directory Configuration" -ForegroundColor $Script:Colors.Title
     Write-Host ""
-    Write-Host "INFORMATION & TESTING" -ForegroundColor $Script:Colors.Menu
+    Write-Host "INFORMATION and TESTING" -ForegroundColor $Script:Colors.Menu
     Write-Host "  1.  View Current Local IPsec Configuration" -ForegroundColor $Script:Colors.Menu
     Write-Host "  2.  View GPO IPsec Configuration" -ForegroundColor $Script:Colors.Menu
     Write-Host "  3.  Load/Test XML Configuration File" -ForegroundColor $Script:Colors.Menu
-    Write-Host "  4.  View IPsec Statistics & Status" -ForegroundColor $Script:Colors.Menu
+    Write-Host "  4.  View IPsec Statistics and Status" -ForegroundColor $Script:Colors.Menu
     Write-Host "  5.  Show Loaded Configuration" -ForegroundColor $Script:Colors.Menu
     Write-Host ""
     Write-Host "LOCAL CONFIGURATION (This Server Only)" -ForegroundColor $Script:Colors.Menu
@@ -1326,6 +1829,11 @@ function Show-EnterpriseMenu {
     Write-Host "  12. Remove IPsec GPOs" -ForegroundColor Yellow
     Write-Host "  13. Apply Complete GPO Configuration" -ForegroundColor Green
     Write-Host "  14. Test GPO Replication Status" -ForegroundColor $Script:Colors.Menu
+    Write-Host ""
+    Write-Host "AD IPSEC MIGRATION (Domain-to-Domain)" -ForegroundColor Cyan
+    Write-Host "  21. Export IPsec from AD IP Security Container" -ForegroundColor $Script:Colors.Menu
+    Write-Host "  22. Import IPsec to AD IP Security Container" -ForegroundColor $Script:Colors.Menu
+    Write-Host "  23. Compare IPsec Between Domains" -ForegroundColor $Script:Colors.Menu
     Write-Host ""
     Write-Host "UTILITIES" -ForegroundColor $Script:Colors.Menu
     Write-Host "  15. Export Current Configuration to XML" -ForegroundColor $Script:Colors.Menu
@@ -1591,6 +2099,18 @@ function Invoke-EnterpriseAction {
         20 {
             # Preview Changes (WhatIf)
             Invoke-PreviewChanges
+        }
+        21 {
+            # Export IPsec from AD
+            Invoke-ExportADIPsec
+        }
+        22 {
+            # Import IPsec to AD
+            Invoke-ImportADIPsec
+        }
+        23 {
+            # Compare IPsec Between Domains
+            Invoke-CompareADIPsec
         }
         default {
             Write-Log "Invalid menu option: $Choice" -Type Error
@@ -5636,6 +6156,200 @@ function Invoke-PreviewChanges {
         Write-Log "ERROR during change analysis: $_" -Type Error
         Write-Log $_.ScriptStackTrace -Type Error -NoConsole
     }
+    
+    Pause-ForUser
+}
+
+function Invoke-ExportADIPsec {
+    <#
+    .SYNOPSIS
+        Wrapper for Export-ADIPsecConfiguration with user prompts.
+    #>
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "EXPORT IPSEC FROM ACTIVE DIRECTORY" -Type Title
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "" -NoFile
+    
+    Write-Log "This function exports IPsec configuration from the AD IP Security container" -Type Info
+    Write-Log "to an XML file that can be analyzed or imported to another domain." -Type Info
+    Write-Log "" -NoFile
+    
+    # Prompt for source domain (optional, can use current domain)
+    Write-Host "Source Domain Configuration:" -ForegroundColor Cyan
+    Write-Host ""
+    $sourceDomain = Read-Host "Enter source domain FQDN (or press Enter for current domain)"
+    
+    if ([string]::IsNullOrWhiteSpace($sourceDomain)) {
+        try {
+            Import-Module ActiveDirectory -ErrorAction Stop
+            $sourceDomain = (Get-ADDomain).DNSRoot
+            Write-Log "Using current domain: $sourceDomain" -Type Info
+        } catch {
+            Write-Log "ERROR: Cannot determine current domain" -Type Error
+            Pause-ForUser
+            return
+        }
+    }
+    
+    # Prompt for output path
+    Write-Host ""
+    $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+    $defaultPath = Join-Path -Path $PSScriptRoot -ChildPath "ADIPsec-Export-$sourceDomain-$timestamp.xml"
+    Write-Host "Default output: $defaultPath" -ForegroundColor Gray
+    $outputPath = Read-Host "Enter output file path (or press Enter for default)"
+    
+    if ([string]::IsNullOrWhiteSpace($outputPath)) {
+        $outputPath = $defaultPath
+    }
+    
+    Write-Log "" -NoFile
+    Write-Log "Configuration:" -Type Info
+    Write-Log "  Source Domain: $sourceDomain" -Type Info
+    Write-Log "  Output File: $outputPath" -Type Info
+    Write-Log "" -NoFile
+    
+    $confirm = Get-UserConfirmation -Message "Proceed with export?"
+    if (-not $confirm) {
+        Write-Log "Export cancelled by user" -Type Info
+        Pause-ForUser
+        return
+    }
+    
+    # Call the export function
+    $result = Export-ADIPsecConfiguration -SourceDomain $sourceDomain -OutputPath $outputPath
+    
+    if ($result) {
+        Write-Log "" -NoFile
+        Write-Log "Export successful!" -Type Success
+        Write-Log "File saved to: $result" -Type Success
+        Write-Log "" -NoFile
+        Write-Log "You can now:" -Type Info
+        Write-Log "  - Review the exported XML file" -Type Info
+        Write-Log "  - Import it to a target domain (Option 22)" -Type Info
+        Write-Log "  - Compare it with another domain (Option 23)" -Type Info
+    }
+    
+    Pause-ForUser
+}
+
+function Invoke-ImportADIPsec {
+    <#
+    .SYNOPSIS
+        Wrapper for Import-ADIPsecConfiguration with user prompts.
+    #>
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "IMPORT IPSEC TO ACTIVE DIRECTORY" -Type Title
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "" -NoFile
+    
+    Write-Log "⚠ WARNING: This operation is currently in PREVIEW mode" -Type Warning
+    Write-Log "" -NoFile
+    Write-Log "This function reads exported IPsec configuration and attempts to" -Type Info
+    Write-Log "recreate the objects in the target domain's IP Security container." -Type Info
+    Write-Log "" -NoFile
+    Write-Log "CURRENT STATUS: Analysis and planning only - full object creation pending" -Type Warning
+    Write-Log "" -NoFile
+    
+    # Prompt for source XML file
+    Write-Host "Source XML File:" -ForegroundColor Cyan
+    $sourceXML = Read-Host "Enter path to exported IPsec XML file"
+    
+    if ([string]::IsNullOrWhiteSpace($sourceXML) -or -not (Test-Path $sourceXML)) {
+        Write-Log "ERROR: Invalid or missing XML file: $sourceXML" -Type Error
+        Pause-ForUser
+        return
+    }
+    
+    # Prompt for target domain
+    Write-Host ""
+    Write-Host "Target Domain Configuration:" -ForegroundColor Cyan
+    $targetDomain = Read-Host "Enter target domain FQDN (or press Enter for current domain)"
+    
+    if ([string]::IsNullOrWhiteSpace($targetDomain)) {
+        try {
+            Import-Module ActiveDirectory -ErrorAction Stop
+            $targetDomain = (Get-ADDomain).DNSRoot
+            Write-Log "Using current domain: $targetDomain" -Type Info
+        } catch {
+            Write-Log "ERROR: Cannot determine current domain" -Type Error
+            Pause-ForUser
+            return
+        }
+    }
+    
+    Write-Log "" -NoFile
+    Write-Log "Configuration:" -Type Info
+    Write-Log "  Source XML: $sourceXML" -Type Info
+    Write-Log "  Target Domain: $targetDomain" -Type Info
+    Write-Log "" -NoFile
+    
+    # WhatIf mode first
+    Write-Log "Running in WhatIf mode (preview only)..." -Type Info
+    Write-Log "" -NoFile
+    
+    $result = Import-ADIPsecConfiguration -SourceXML $sourceXML -TargetDomain $targetDomain -WhatIf
+    
+    Pause-ForUser
+}
+
+function Invoke-CompareADIPsec {
+    <#
+    .SYNOPSIS
+        Wrapper for Compare-ADIPsecConfiguration with user prompts.
+    #>
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "COMPARE IPSEC BETWEEN DOMAINS" -Type Title
+    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "" -NoFile
+    
+    Write-Log "This function compares IPsec objects in the IP Security containers" -Type Info
+    Write-Log "of two Active Directory domains to identify differences." -Type Info
+    Write-Log "" -NoFile
+    
+    # Prompt for source domain
+    Write-Host "Source Domain (working/reference domain):" -ForegroundColor Cyan
+    $sourceDomain = Read-Host "Enter source domain FQDN"
+    
+    if ([string]::IsNullOrWhiteSpace($sourceDomain)) {
+        Write-Log "ERROR: Source domain is required" -Type Error
+        Pause-ForUser
+        return
+    }
+    
+    # Prompt for target domain
+    Write-Host ""
+    Write-Host "Target Domain (domain to compare against):" -ForegroundColor Cyan
+    $targetDomain = Read-Host "Enter target domain FQDN"
+    
+    if ([string]::IsNullOrWhiteSpace($targetDomain)) {
+        Write-Log "ERROR: Target domain is required" -Type Error
+        Pause-ForUser
+        return
+    }
+    
+    Write-Log "" -NoFile
+    Write-Log "Comparison Configuration:" -Type Info
+    Write-Log "  Source (Reference): $sourceDomain" -Type Info
+    Write-Log "  Target (Compare): $targetDomain" -Type Info
+    Write-Log "" -NoFile
+    
+    $confirm = Get-UserConfirmation -Message "Proceed with comparison?"
+    if (-not $confirm) {
+        Write-Log "Comparison cancelled by user" -Type Info
+        Pause-ForUser
+        return
+    }
+    
+    # Call the comparison function
+    Compare-ADIPsecConfiguration -SourceDomain $sourceDomain -TargetDomain $targetDomain
+    
+    Write-Log "" -NoFile
+    Write-Log "Comparison complete!" -Type Success
+    Write-Log "" -NoFile
+    Write-Log "Next steps:" -Type Info
+    Write-Log "  - If differences found, export from source (Option 21)" -Type Info
+    Write-Log "  - Review the exported configuration" -Type Info
+    Write-Log "  - Import to target domain (Option 22)" -Type Info
     
     Pause-ForUser
 }

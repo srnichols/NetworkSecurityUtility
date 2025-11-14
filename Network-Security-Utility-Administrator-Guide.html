@@ -1716,6 +1716,11 @@ Example:
 <span class="menu-section">ANALYSIS</span>
 <span class="menu-option menu-highlight">  20. Preview Changes (WhatIf Mode)</span>
 
+<span class="menu-section">AD IPSEC MIGRATION (Domain-to-Domain)</span>
+<span class="menu-option">  21. Export AD IPsec Configuration to XML</span>
+<span class="menu-option">  22. Import AD IPsec Configuration (Preview)</span>
+<span class="menu-option">  23. Compare IPsec Between Domains</span>
+
 <span class="menu-option">  0.  Exit</span></div>
                 
                 <h3>Menu Option Details</h3>
@@ -1817,10 +1822,74 @@ Example:
                     </tr>
                 </table>
                 
+                <h4>AD IPSEC MIGRATION Section (Domain-to-Domain)</h4>
+                <table>
+                    <tr>
+                        <th style="width: 80px;">Option</th>
+                        <th>Description</th>
+                        <th>Requirements</th>
+                    </tr>
+                    <tr>
+                        <td><strong>21</strong></td>
+                        <td>Export AD IPsec Configuration to XML</td>
+                        <td><span class="badge badge-required">Domain Admin (Source)</span> Reads all IPsec objects from AD and saves to XML file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>22</strong></td>
+                        <td>Import AD IPsec Configuration (Preview)</td>
+                        <td><span class="badge badge-required">Domain Admin (Target)</span> Analyzes XML and displays planned import (read-only)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>23</strong></td>
+                        <td>Compare IPsec Between Domains</td>
+                        <td><span class="badge badge-required">Domain Admin (Both)</span> Side-by-side comparison of IPsec objects</td>
+                    </tr>
+                </table>
+                
+                <div class="warning-box">
+                    <h4>⚠️ AD IPsec Migration Limitations</h4>
+                    <p><strong>Option 22 is PREVIEW ONLY:</strong> Import currently shows what would be created but does NOT create objects in the target domain. This is because IPsec objects contain complex binary attributes (ipsecData, ipsecNFAReference) that require precise encoding.</p>
+                    <p><strong>Recommended Approach:</strong> Use Option 21 to export from source domain, then manually recreate policies in target domain using the exported XML as a reference, or use Group Policy Management Console (GPMC) to copy IPsec GPOs between domains.</p>
+                </div>
+                
                 <div class="info-box">
                     <h4>💡 Understanding Local vs. Domain Configuration</h4>
                     <p><strong>Local Configuration (Options 6-8):</strong> Affects ONLY the server where the script is running. Useful for testing before deploying via GPO.</p>
                     <p><strong>Domain Configuration (Options 9-14):</strong> Creates/manages GPOs that will be applied to ALL servers in the linked Organizational Units. This is the recommended approach for enterprise environments.</p>
+                    <p><strong>AD IPsec Migration (Options 21-23):</strong> Works directly with the Active Directory IP Security container (CN=IP Security,CN=System,DC=...). Used for migrating legacy AD-based IPsec policies between domains.</p>
+                </div>
+                
+                <h3>AD IPsec Migration Workflow (Domain-to-Domain)</h3>
+                <div class="workflow-diagram">
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Source Domain: Option 21 (Export)</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Review XML File</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Target Domain: Option 22 (Preview)</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div class="workflow-step">Manually Recreate (GPMC or Script)</div>
+                        <span class="workflow-arrow">↓</span>
+                    </div>
+                    <div>
+                        <div class="workflow-step">Option 23: Verify (Compare)</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>📋 AD IPsec Migration Prerequisites</h4>
+                    <ul>
+                        <li><strong>ActiveDirectory PowerShell Module:</strong> Must be installed on both source and target domain-joined machines</li>
+                        <li><strong>Domain Admin Credentials:</strong> Required to read AD IP Security container</li>
+                        <li><strong>Network Connectivity:</strong> Script must be able to reach Domain Controllers in both domains</li>
+                        <li><strong>AD Container:</strong> Source domain must have IPsec objects in <code>CN=IP Security,CN=System,DC=...</code></li>
+                    </ul>
                 </div>
                 
                 <h3>Typical ENTERPRISE MODE Workflow</h3>
