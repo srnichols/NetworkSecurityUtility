@@ -1849,6 +1849,79 @@ function Show-EnterpriseMenu {
     Write-Host ""
 }
 
+function Get-MenuItemDescription {
+    <#
+    .SYNOPSIS
+        Returns the descriptive text for a menu item.
+    #>
+    param (
+        [Parameter(Mandatory=$true)]
+        [int]$Choice,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Mode
+    )
+    
+    if ($Mode -eq 'Enterprise') {
+        $descriptions = @{
+            0 = "Exit"
+            1 = "View Current Local IPsec Configuration"
+            2 = "View GPO IPsec Configuration"
+            3 = "Load/Test XML Configuration File"
+            4 = "View IPsec Statistics and Status"
+            5 = "Show Loaded Configuration"
+            6 = "Remove All Local IPsec Rules"
+            7 = "Configure Local Windows Firewall"
+            8 = "Apply Local IPsec Configuration"
+            9 = "List Existing IPsec GPOs"
+            10 = "Create/Update IPsec GPOs"
+            11 = "Link GPOs to OUs"
+            12 = "Remove IPsec GPOs"
+            13 = "Apply Complete GPO Configuration"
+            14 = "Test GPO Replication Status"
+            15 = "Export Current Configuration to XML"
+            16 = "Generate HTML Report"
+            17 = "Backup Current Settings"
+            18 = "Restore from Backup"
+            19 = "View Firewall Logs"
+            20 = "Preview Changes (WhatIf Mode)"
+            21 = "Export IPsec from AD IP Security Container"
+            22 = "Import IPsec to AD IP Security Container"
+            23 = "Compare IPsec Between Domains"
+        }
+    } else {
+        $descriptions = @{
+            0 = "Exit"
+            1 = "View Current IPsec Configuration"
+            2 = "Load/Test XML Configuration File"
+            3 = "View IPsec Statistics and Status"
+            4 = "Show Loaded Configuration"
+            5 = "Remove All IPsec Rules"
+            6 = "Configure Windows Firewall"
+            7 = "Create Phase 1 Authentication"
+            8 = "Create Main Mode Crypto Sets"
+            9 = "Create Quick Mode Crypto Sets"
+            10 = "Apply IPsec Rules"
+            11 = "Apply Complete Configuration (All Steps)"
+            12 = "Export Current Configuration to XML"
+            13 = "Generate HTML Report"
+            14 = "Backup Current Settings"
+            15 = "Restore from Backup"
+            16 = "View Firewall Logs"
+            17 = "Test IPsec Connectivity to Remote Host"
+            18 = "View IPsec Event Logs"
+            19 = "View Certificate Information"
+            20 = "Preview Changes (WhatIf Mode)"
+        }
+    }
+    
+    if ($descriptions.ContainsKey($Choice)) {
+        return $descriptions[$Choice]
+    } else {
+        return "Unknown Option"
+    }
+}
+
 function Get-MenuChoice {
     <#
     .SYNOPSIS
