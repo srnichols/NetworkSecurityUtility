@@ -1090,12 +1090,12 @@ function Update-CTMIPsecGpoSettings {
                                -Enabled True `
                                -DefaultInboundAction Block `
                                -DefaultOutboundAction Allow `
-                               –AllowLocalIPsecRules True `
-                               –EnableStealthModeForIPsec True `
-                               –LogAllowed True `
-                               –LogBlocked True `
-                               –LogMaxSizeKilobytes 32767 `
-                               –LogFileName $logFile `
+                               -AllowLocalIPsecRules True `
+                               -EnableStealthModeForIPsec True `
+                               -LogAllowed True `
+                               -LogBlocked True `
+                               -LogMaxSizeKilobytes 32767 `
+                               -LogFileName $logFile `
                                @parameters | Out-Null
         Write-CTMLog -Log 'Firewall profiles updated' -Type Info
     } catch {
@@ -1119,11 +1119,11 @@ function Update-CTMIPsecGpoSettings {
     if (!$p1AuthSet) {
         try {
             $p1Proposal = New-NetIPsecAuthProposal -Machine `
-                                                   –Cert `
+                                                   -Cert `
                                                    -Authority $Settings['CAPath'] `
                                                    -AuthorityType Root `
                                                    -ErrorAction Stop
-            $p1AuthSet = New-NetIPsecPhase1AuthSet –DisplayName $p1AuthSetName `
+            $p1AuthSet = New-NetIPsecPhase1AuthSet -DisplayName $p1AuthSetName `
                                                    -Proposal $p1Proposal `
                                                    @parameters
             Write-CTMLog -Log "Phase 1 authentication set '$p1AuthSetName' created" -Type Info
@@ -1223,7 +1223,7 @@ function Update-CTMIPsecGpoSettings {
         }
         try {
             $qmProposal = New-NetIPsecQuickModeCryptoProposal @parametersQm
-            $qmCryptoSet = New-NetIPsecQuickModeCryptoSet –DisplayName $qmCryptoSetName `
+            $qmCryptoSet = New-NetIPsecQuickModeCryptoSet -DisplayName $qmCryptoSetName `
                                                           -Proposal $qmProposal `
                                                           -PerfectForwardSecrecyGroup SameAsMainMode `
                                                           @parameters
@@ -1553,3 +1553,4 @@ if ($success) {
     Write-CTMLog -Log 'Failed to execute the script' -Type Error
 }
 $success
+

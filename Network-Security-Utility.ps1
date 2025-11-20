@@ -1251,9 +1251,9 @@ function Export-ADIPsecConfiguration {
         [System.Management.Automation.PSCredential]$Credential
     )
     
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "EXPORT IPSEC CONFIGURATION FROM ACTIVE DIRECTORY" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -1490,9 +1490,9 @@ function Import-ADIPsecConfiguration {
         [switch]$WhatIf
     )
     
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "IMPORT IPSEC CONFIGURATION TO ACTIVE DIRECTORY" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -1562,9 +1562,9 @@ function Import-ADIPsecConfiguration {
             return $false
         }
         
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "IMPORT SUMMARY" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Count objects
@@ -1646,9 +1646,9 @@ function Compare-ADIPsecConfiguration {
         [string]$TargetDomain
     )
     
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "COMPARE IPSEC CONFIGURATIONS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     Write-Log "Source: $SourceDomain" -Type Info
@@ -1674,9 +1674,9 @@ function Compare-ADIPsecConfiguration {
         
         # Compare
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "COMPARISON RESULTS" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Group by object class
@@ -1732,10 +1732,10 @@ function Show-MainMenu {
     Clear-Host
     
     Write-Host ""
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor $Script:Colors.Header
+    Write-Host "===========================================================" -ForegroundColor $Script:Colors.Header
     Write-Host "  $Script:ScriptName v$Script:Version" -ForegroundColor $Script:Colors.Title
     Write-Host "  Client: $Script:ClientName" -ForegroundColor $Script:Colors.Info
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor $Script:Colors.Header
+    Write-Host "===========================================================" -ForegroundColor $Script:Colors.Header
     Write-Host ""
     Write-Host "  Mode: " -NoNewline -ForegroundColor $Script:Colors.Info
     Write-Host "$Script:EnvironmentMode" -ForegroundColor $Script:Colors.Success
@@ -1745,12 +1745,12 @@ function Show-MainMenu {
     Write-Host ""
     
     if ($Script:ConfigFileLoaded) {
-        Write-Host "  ✓ Configuration loaded: $($Script:CurrentConfig.Rules.Count) rules" -ForegroundColor $Script:Colors.Success
+        Write-Host "  [OK] Configuration loaded: $($Script:CurrentConfig.Rules.Count) rules" -ForegroundColor $Script:Colors.Success
     } else {
-        Write-Host "  ⚠ No configuration loaded" -ForegroundColor $Script:Colors.Warning
+        Write-Host "  [!] No configuration loaded" -ForegroundColor $Script:Colors.Warning
     }
     Write-Host ""
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor $Script:Colors.Header
+    Write-Host "===========================================================" -ForegroundColor $Script:Colors.Header
     Write-Host ""
     
     if ($Script:EnvironmentMode -eq 'Enterprise') {
@@ -2202,9 +2202,9 @@ function Show-GPOIPsecConfiguration {
         Prompts for GPO name and displays its IPsec/Firewall configuration,
         comparing with local settings to identify differences.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "VIEW GPO IPSEC CONFIGURATION" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -2282,9 +2282,9 @@ function Show-GPOIPsecDetails {
     )
     
     Write-Log "" -NoFile
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "GPO: $GPOName" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -2360,9 +2360,9 @@ function Show-GPOIPsecDetails {
         }
         
         # Compare with local configuration
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "COMPARISON WITH LOCAL CONFIGURATION" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Get local IPsec rules
@@ -2852,25 +2852,25 @@ function Invoke-ApplyIPsecRules {
                 # Create the IPsec rule
                 [void](New-NetIPsecRule @ruleParams)
                 
-                Write-Log "  ✓ Rule created successfully" -Type Success
+                Write-Log "  [OK] Rule created successfully" -Type Success
                 Write-Log "    Inbound: $($rule.Inbound), Outbound: $($rule.Outbound)" -Type Info
                 Write-Log "    Protocol: $($rule.Protocol)" -Type Info
                 
                 $successCount++
                 
             } catch {
-                Write-Log "  ✗ Failed to create rule: $_" -Type Error
+                Write-Log "  [X] Failed to create rule: $_" -Type Error
                 $failCount++
             }
         }
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════" -Type Info
+        Write-Log "=======================================" -Type Info
         Write-Log "IPsec Rule Application Summary:" -Type Title
         Write-Log "  Successfully created: $successCount" -Type Success
         Write-Log "  Skipped (already exist): $skippedCount" -Type Warning
         Write-Log "  Failed: $failCount" -Type $(if ($failCount -gt 0) { 'Error' } else { 'Info' })
-        Write-Log "═══════════════════════════════════════" -Type Info
+        Write-Log "=======================================" -Type Info
         
         if ($successCount -gt 0) {
             Write-Log "" -NoFile
@@ -2898,9 +2898,9 @@ function Invoke-ApplyCompleteLocal {
         4. Create Quick Mode Crypto Sets
         5. Apply IPsec Rules
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "COMPLETE LOCAL IPSEC CONFIGURATION" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     if (-not $Script:ConfigFileLoaded) {
@@ -2959,9 +2959,9 @@ function Invoke-ApplyCompleteLocal {
     try {
         # Step 1: Configure Windows Firewall
         Write-Log "" -NoFile
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         Write-Log "STEP 1 of 5: Configuring Windows Firewall" -Type Title
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         
         try {
             $settings = $Script:CurrentConfig.Settings
@@ -2985,17 +2985,17 @@ function Invoke-ApplyCompleteLocal {
                                    -CertValidationLevel $crlCheck `
                                    -ErrorAction Stop
             
-            Write-Log "✓ Firewall configured successfully" -Type Success
+            Write-Log "[OK] Firewall configured successfully" -Type Success
         } catch {
-            Write-Log "✗ Firewall configuration failed: $_" -Type Error
+            Write-Log "[X] Firewall configuration failed: $_" -Type Error
             $overallSuccess = $false
         }
         
         # Step 2: Create Phase 1 Authentication
         Write-Log "" -NoFile
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         Write-Log "STEP 2 of 5: Creating Phase 1 Authentication" -Type Title
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         
         try {
             $authSetName = "IPsec Computer Certificate Auth"
@@ -3016,17 +3016,17 @@ function Invoke-ApplyCompleteLocal {
                                                 -PolicyStore ActiveStore `
                                                 -ErrorAction Stop
             
-            Write-Log "✓ Phase 1 authentication created" -Type Success
+            Write-Log "[OK] Phase 1 authentication created" -Type Success
         } catch {
-            Write-Log "✗ Phase 1 authentication failed: $_" -Type Error
+            Write-Log "[X] Phase 1 authentication failed: $_" -Type Error
             $overallSuccess = $false
         }
         
         # Step 3: Create Main Mode Crypto
         Write-Log "" -NoFile
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         Write-Log "STEP 3 of 5: Creating Main Mode Crypto Sets" -Type Title
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         
         try {
             $cryptoSetName = "IPsec Main Mode Crypto"
@@ -3060,17 +3060,17 @@ function Invoke-ApplyCompleteLocal {
                                               -PolicyStore ActiveStore `
                                               -ErrorAction Stop)
             
-            Write-Log "✓ Main Mode crypto sets created" -Type Success
+            Write-Log "[OK] Main Mode crypto sets created" -Type Success
         } catch {
-            Write-Log "✗ Main Mode crypto creation failed: $_" -Type Error
+            Write-Log "[X] Main Mode crypto creation failed: $_" -Type Error
             $overallSuccess = $false
         }
         
         # Step 4: Create Quick Mode Crypto
         Write-Log "" -NoFile
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         Write-Log "STEP 4 of 5: Creating Quick Mode Crypto Sets" -Type Title
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         
         try {
             $qmCryptoSetName = "IPsec Quick Mode Crypto"
@@ -3103,17 +3103,17 @@ function Invoke-ApplyCompleteLocal {
                               -PolicyStore ActiveStore `
                               -ErrorAction Stop
             
-            Write-Log "✓ Quick Mode crypto sets created" -Type Success
+            Write-Log "[OK] Quick Mode crypto sets created" -Type Success
         } catch {
-            Write-Log "✗ Quick Mode crypto creation failed: $_" -Type Error
+            Write-Log "[X] Quick Mode crypto creation failed: $_" -Type Error
             $overallSuccess = $false
         }
         
         # Step 5: Apply IPsec Rules
         Write-Log "" -NoFile
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         Write-Log "STEP 5 of 5: Applying IPsec Rules" -Type Title
-        Write-Log "─────────────────────────────────────────" -Type Info
+        Write-Log "?????????????????????????????????????????" -Type Info
         
         try {
             $successCount = 0
@@ -3148,11 +3148,11 @@ function Invoke-ApplyCompleteLocal {
                     }
                     
                     [void](New-NetIPsecRule @ruleParams)
-                    Write-Log "  ✓ $($rule.Name)" -Type Success
+                    Write-Log "  [OK] $($rule.Name)" -Type Success
                     $successCount++
                     
                 } catch {
-                    Write-Log "  ✗ $($rule.Name): $_" -Type Error
+                    Write-Log "  [X] $($rule.Name): $_" -Type Error
                     $failCount++
                     $overallSuccess = $false
                 }
@@ -3161,7 +3161,7 @@ function Invoke-ApplyCompleteLocal {
             Write-Log "Rules applied: $successCount success, $failCount failed" -Type Info
             
         } catch {
-            Write-Log "✗ Rule application failed: $_" -Type Error
+            Write-Log "[X] Rule application failed: $_" -Type Error
             $overallSuccess = $false
         }
         
@@ -3169,14 +3169,14 @@ function Invoke-ApplyCompleteLocal {
         $duration = (Get-Date) - $startTime
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "CONFIGURATION COMPLETE" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         
         if ($overallSuccess) {
-            Write-Log "✓ All components configured successfully!" -Type Success
+            Write-Log "[OK] All components configured successfully!" -Type Success
         } else {
-            Write-Log "⚠ Configuration completed with errors" -Type Warning
+            Write-Log "[!] Configuration completed with errors" -Type Warning
             Write-Log "Check log file for details: $Script:LogFilePath" -Type Info
         }
         
@@ -3203,9 +3203,9 @@ function Invoke-ListGPOs {
         Searches Active Directory for GPOs containing IPsec rules or firewall settings,
         displays GPO details including linked OUs, dates, and policy information.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "LIST IPSEC GROUP POLICY OBJECTS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -3308,7 +3308,7 @@ function Invoke-ListGPOs {
         }
         
         # Show detailed view option
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Host ""
         $viewDetail = Read-Host "View detailed configuration for a GPO? (Enter number or 0 to skip)"
         
@@ -3333,9 +3333,9 @@ function Invoke-CreateUpdateGPOs {
         Creates new GPO or updates existing GPO with IPsec rules and settings
         from loaded XML configuration. Supports staging mode.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "CREATE/UPDATE IPSEC GROUP POLICY OBJECT" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -3535,7 +3535,7 @@ function Invoke-CreateUpdateGPOs {
         $successCount += $ruleCount
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         
         if ($errorCount -eq 0) {
             Write-Log "GPO configuration completed successfully!" -Type Success
@@ -3572,9 +3572,9 @@ function Invoke-LinkGPOs {
         Links a GPO to one or more OUs with configurable precedence.
         Allows enabling/disabling links without deletion.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "LINK GPO TO ORGANIZATIONAL UNITS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -3722,9 +3722,9 @@ function Invoke-LinkGPOs {
             New-GPLink @linkParams | Out-Null
             
             Write-Log "" -NoFile
-            Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+            Write-Log "===========================================================" -Type Header
             Write-Log "GPO LINKED SUCCESSFULLY" -Type Success
-            Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+            Write-Log "===========================================================" -Type Header
             Write-Log "" -NoFile
             Write-Log "GPO:      $($targetGPO.DisplayName)" -Type Info
             Write-Log "Linked to: $ouPath" -Type Info
@@ -3771,9 +3771,9 @@ function Invoke-RemoveGPOs {
         Safely removes GPO after unlink confirmation and backup.
         Prevents accidental deletion of production GPOs.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "REMOVE IPSEC GROUP POLICY OBJECT" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -3919,9 +3919,9 @@ function Invoke-RemoveGPOs {
                 Remove-GPO -Guid $targetGPO.Id -ErrorAction Stop
                 
                 Write-Log "" -NoFile
-                Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+                Write-Log "===========================================================" -Type Header
                 Write-Log "GPO REMOVED SUCCESSFULLY" -Type Success
-                Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+                Write-Log "===========================================================" -Type Header
                 Write-Log "" -NoFile
                 Write-Log "GPO '$($targetGPO.DisplayName)' has been removed from Active Directory" -Type Success
                 
@@ -3957,9 +3957,9 @@ function Invoke-ApplyCompleteGPO {
         3. Tests replication across DCs
         4. Verifies deployment success
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "APPLY COMPLETE GPO CONFIGURATION" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -4000,13 +4000,13 @@ function Invoke-ApplyCompleteGPO {
             return
         }
         
-        # ═══════════════════════════════════════════════════════════
+        # ===========================================================
         # STEP 1: Create/Update GPO
-        # ═══════════════════════════════════════════════════════════
+        # ===========================================================
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "STEP 1: CREATE/UPDATE GPO" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         Write-Log "Enter GPO name:" -Type Info
@@ -4167,12 +4167,12 @@ function Invoke-ApplyCompleteGPO {
         Write-Log "Step 1 completed: GPO configured" -Type Success
         Write-Log "" -NoFile
         
-        # ═══════════════════════════════════════════════════════════
+        # ===========================================================
         # STEP 2: Link GPO to OUs
-        # ═══════════════════════════════════════════════════════════
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        # ===========================================================
+        Write-Log "===========================================================" -Type Header
         Write-Log "STEP 2: LINK GPO TO ORGANIZATIONAL UNITS" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         $linkAnother = 'Y'
@@ -4253,12 +4253,12 @@ function Invoke-ApplyCompleteGPO {
         
         Write-Log "" -NoFile
         
-        # ═══════════════════════════════════════════════════════════
+        # ===========================================================
         # STEP 3: Test Replication
-        # ═══════════════════════════════════════════════════════════
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        # ===========================================================
+        Write-Log "===========================================================" -Type Header
         Write-Log "STEP 3: VERIFY GPO REPLICATION" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         $testReplication = Read-Host "Test GPO replication now? (Y/N, recommended)"
@@ -4310,12 +4310,12 @@ function Invoke-ApplyCompleteGPO {
         
         Write-Log "" -NoFile
         
-        # ═══════════════════════════════════════════════════════════
+        # ===========================================================
         # FINAL SUMMARY
-        # ═══════════════════════════════════════════════════════════
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        # ===========================================================
+        Write-Log "===========================================================" -Type Header
         Write-Log "COMPLETE GPO DEPLOYMENT FINISHED" -Type Success
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         Write-Log "Summary:" -Type Info
@@ -4348,9 +4348,9 @@ function Invoke-TestGPOReplication {
         Checks GPO version numbers on all DCs, identifies replication lag,
         and provides option to force replication if needed.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "TEST GPO REPLICATION STATUS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -4497,9 +4497,9 @@ function Invoke-TestGPOReplication {
         }
         
         # Analyze replication status
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "REPLICATION ANALYSIS" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         $successfulDCs = $replicationResults | Where-Object { $_.Status -eq 'Success' }
@@ -4549,7 +4549,7 @@ function Invoke-TestGPOReplication {
         # Offer to force replication
         if ($uniqueUserVersions.Count -gt 1 -or $uniqueComputerVersions.Count -gt 1) {
             Write-Log "" -NoFile
-            Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+            Write-Log "===========================================================" -Type Header
             $forceRepl = Read-Host "Force GPO replication now? (Y/N)"
             
             if ($forceRepl -match '^[Yy]') {
@@ -4596,9 +4596,9 @@ function Invoke-ExportConfiguration {
         - Quick Mode crypto sets
         - IPsec rules
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "EXPORT IPSEC CONFIGURATION" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -4740,7 +4740,7 @@ function Invoke-ExportConfiguration {
         $writer.Close()
         
         Write-Log "" -NoFile
-        Write-Log "✓ Configuration exported successfully!" -Type Success
+        Write-Log "[OK] Configuration exported successfully!" -Type Success
         Write-Log "  File: $exportPath" -Type Info
         Write-Log "  Size: $([math]::Round((Get-Item $exportPath).Length / 1KB, 2)) KB" -Type Info
         Write-Log "  Rules: $($ipsecRules.Count)" -Type Info
@@ -4767,9 +4767,9 @@ function Invoke-GenerateReport {
         - IPsec rules
         - Security associations
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "GENERATE IPSEC REPORT" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -5088,7 +5088,7 @@ function Invoke-GenerateReport {
         $html | Out-File -FilePath $reportPath -Encoding UTF8 -ErrorAction Stop
         
         Write-Log "" -NoFile
-        Write-Log "✓ Report generated successfully!" -Type Success
+        Write-Log "[OK] Report generated successfully!" -Type Success
         Write-Log "  File: $reportPath" -Type Info
         Write-Log "  Size: $([math]::Round((Get-Item $reportPath).Length / 1KB, 2)) KB" -Type Info
         Write-Log "" -NoFile
@@ -5119,9 +5119,9 @@ function Invoke-BackupSettings {
         - Windows Firewall settings
         - Stores backup with timestamp for restore capability
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "BACKUP IPSEC SETTINGS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -5144,9 +5144,9 @@ function Invoke-BackupSettings {
         $result = netsh ipsec static exportpolicy file="$ipsecFile" 2>&1
         
         if ($LASTEXITCODE -eq 0 -or (Test-Path $ipsecFile)) {
-            Write-Log "  ✓ IPsec static configuration backed up" -Type Success
+            Write-Log "  [OK] IPsec static configuration backed up" -Type Success
         } else {
-            Write-Log "  ⚠ IPsec static export returned: $result" -Type Warning
+            Write-Log "  [!] IPsec static export returned: $result" -Type Warning
         }
         
         # Backup Windows Firewall with Advanced Security
@@ -5155,9 +5155,9 @@ function Invoke-BackupSettings {
         $result = netsh advfirewall export "$firewallFile" 2>&1
         
         if ($LASTEXITCODE -eq 0 -and (Test-Path $firewallFile)) {
-            Write-Log "  ✓ Firewall configuration backed up" -Type Success
+            Write-Log "  [OK] Firewall configuration backed up" -Type Success
         } else {
-            Write-Log "  ⚠ Firewall export warning: $result" -Type Warning
+            Write-Log "  [!] Firewall export warning: $result" -Type Warning
         }
         
         # Export current configuration to XML for reference
@@ -5198,10 +5198,10 @@ function Invoke-BackupSettings {
             $root.AppendChild($rulesNode) | Out-Null
             
             $xmlDoc.Save($xmlFile)
-            Write-Log "  ✓ Configuration XML created" -Type Success
+            Write-Log "  [OK] Configuration XML created" -Type Success
             
         } catch {
-            Write-Log "  ⚠ XML export failed: $_" -Type Warning
+            Write-Log "  [!] XML export failed: $_" -Type Warning
         }
         
         # Create backup manifest
@@ -5241,18 +5241,18 @@ CAUTION: Always review configuration before restoring!
 "@
         
         $manifest | Out-File -FilePath $manifestFile -Encoding UTF8
-        Write-Log "  ✓ Backup manifest created" -Type Success
+        Write-Log "  [OK] Backup manifest created" -Type Success
         
         # Calculate backup size
         $backupSize = (Get-ChildItem -Path $backupPath -Recurse | Measure-Object -Property Length -Sum).Sum
         $backupSizeMB = [math]::Round($backupSize / 1MB, 2)
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "BACKUP COMPLETE" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
-        Write-Log "✓ Backup created successfully!" -Type Success
+        Write-Log "[OK] Backup created successfully!" -Type Success
         Write-Log "  Location: $backupPath" -Type Info
         Write-Log "  Size: $backupSizeMB MB" -Type Info
         Write-Log "  Files: $($(Get-ChildItem -Path $backupPath).Count)" -Type Info
@@ -5279,9 +5279,9 @@ function Invoke-RestoreFromBackup {
         - Restore firewall and IPsec settings
         - Optionally apply configuration using utility
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "RESTORE FROM BACKUP" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -5367,9 +5367,9 @@ function Invoke-RestoreFromBackup {
         $hasConfig = Test-Path $configFile
         
         Write-Log "Backup contents:" -Type Info
-        Write-Log "  Firewall config: $(if ($hasFirewall) { '✓ Found' } else { '✗ Not found' })" -Type Info
-        Write-Log "  IPsec static config: $(if ($hasIPsec) { '✓ Found' } else { '✗ Not found' })" -Type Info
-        Write-Log "  Configuration XML: $(if ($hasConfig) { '✓ Found' } else { '✗ Not found' })" -Type Info
+        Write-Log "  Firewall config: $(if ($hasFirewall) { '[OK] Found' } else { '[X] Not found' })" -Type Info
+        Write-Log "  IPsec static config: $(if ($hasIPsec) { '[OK] Found' } else { '[X] Not found' })" -Type Info
+        Write-Log "  Configuration XML: $(if ($hasConfig) { '[OK] Found' } else { '[X] Not found' })" -Type Info
         Write-Log "" -NoFile
         
         if (-not $hasFirewall -and -not $hasIPsec -and -not $hasConfig) {
@@ -5379,7 +5379,7 @@ function Invoke-RestoreFromBackup {
         }
         
         # Warning message
-        Write-Log "⚠ WARNING: This will replace your current configuration!" -Type Warning
+        Write-Log "[!] WARNING: This will replace your current configuration!" -Type Warning
         Write-Log "" -NoFile
         Write-Host "Are you sure you want to restore from this backup? (yes/no): " -NoNewline -ForegroundColor Yellow
         $confirm = Read-Host
@@ -5391,9 +5391,9 @@ function Invoke-RestoreFromBackup {
         }
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "STARTING RESTORE" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Restore Windows Firewall
@@ -5402,12 +5402,12 @@ function Invoke-RestoreFromBackup {
             try {
                 $result = netsh advfirewall import "$firewallFile" 2>&1
                 if ($LASTEXITCODE -eq 0) {
-                    Write-Log "  ✓ Firewall configuration restored" -Type Success
+                    Write-Log "  [OK] Firewall configuration restored" -Type Success
                 } else {
-                    Write-Log "  ⚠ Firewall restore warning: $result" -Type Warning
+                    Write-Log "  [!] Firewall restore warning: $result" -Type Warning
                 }
             } catch {
-                Write-Log "  ✗ Firewall restore failed: $_" -Type Error
+                Write-Log "  [X] Firewall restore failed: $_" -Type Error
             }
         }
         
@@ -5417,19 +5417,19 @@ function Invoke-RestoreFromBackup {
             try {
                 $result = netsh ipsec static importpolicy file="$ipsecFile" 2>&1
                 if ($LASTEXITCODE -eq 0) {
-                    Write-Log "  ✓ IPsec static configuration restored" -Type Success
+                    Write-Log "  [OK] IPsec static configuration restored" -Type Success
                 } else {
-                    Write-Log "  ⚠ IPsec restore warning: $result" -Type Warning
+                    Write-Log "  [!] IPsec restore warning: $result" -Type Warning
                 }
             } catch {
-                Write-Log "  ✗ IPsec restore failed: $_" -Type Error
+                Write-Log "  [X] IPsec restore failed: $_" -Type Error
             }
         }
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "RESTORE COMPLETE" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Offer to load XML configuration
@@ -5448,14 +5448,14 @@ function Invoke-RestoreFromBackup {
                 
                 # Note: The actual XML format from backup is different from input XML
                 # This is informational only
-                Write-Log "  ℹ Note: The backup XML is for reference only" -Type Info
-                Write-Log "  ℹ To apply new settings, use a configuration XML file" -Type Info
-                Write-Log "  ℹ The netsh restore has already applied the backed-up settings" -Type Info
+                Write-Log "  [i] Note: The backup XML is for reference only" -Type Info
+                Write-Log "  [i] To apply new settings, use a configuration XML file" -Type Info
+                Write-Log "  [i] The netsh restore has already applied the backed-up settings" -Type Info
             }
         }
         
         Write-Log "" -NoFile
-        Write-Log "✓ Configuration has been restored from backup" -Type Success
+        Write-Log "[OK] Configuration has been restored from backup" -Type Success
         Write-Log "" -NoFile
         Write-Log "Recommended next steps:" -Type Info
         Write-Log "  1. View current configuration (Menu Option 1)" -Type Info
@@ -5494,9 +5494,9 @@ function Invoke-TestIPsecConnectivity {
         - Connection success/failure
         - Troubleshooting information
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "TEST IPSEC CONNECTIVITY" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -5526,9 +5526,9 @@ function Invoke-TestIPsecConnectivity {
         $pingResult = Test-Connection -ComputerName $remoteHost -Count 2 -Quiet -ErrorAction SilentlyContinue
         
         if ($pingResult) {
-            Write-Log "  ✓ Host is reachable" -Type Success
+            Write-Log "  [OK] Host is reachable" -Type Success
         } else {
-            Write-Log "  ✗ Host is not responding to ping" -Type Warning
+            Write-Log "  [X] Host is not responding to ping" -Type Warning
             Write-Log "    Note: Host may block ICMP but still accept IPsec" -Type Info
         }
         Write-Log "" -NoFile
@@ -5551,13 +5551,13 @@ function Invoke-TestIPsecConnectivity {
         $quickModeChange = $currentQuickModeSAs - $initialQuickModeSAs
         
         if ($mainModeChange -gt 0 -or $quickModeChange -gt 0) {
-            Write-Log "✓ New Security Associations formed!" -Type Success
+            Write-Log "[OK] New Security Associations formed!" -Type Success
             Write-Log "  Main Mode change: +$mainModeChange" -Type Success
             Write-Log "  Quick Mode change: +$quickModeChange" -Type Success
             Write-Log "" -NoFile
             Write-Log "IPsec appears to be working correctly" -Type Success
         } else {
-            Write-Log "⚠ No new Security Associations formed" -Type Warning
+            Write-Log "[!] No new Security Associations formed" -Type Warning
             Write-Log "" -NoFile
         }
         
@@ -5571,7 +5571,7 @@ function Invoke-TestIPsecConnectivity {
                        Where-Object { $_.RemoteEndpoint -like "*$remoteHost*" }
         
         if ($mainModeSA) {
-            Write-Log "✓ Main Mode SA found to $remoteHost" -Type Success
+            Write-Log "[OK] Main Mode SA found to $remoteHost" -Type Success
             Write-Log "  Local: $($mainModeSA.LocalEndpoint)" -Type Info
             Write-Log "  Remote: $($mainModeSA.RemoteEndpoint)" -Type Info
             Write-Log "  Auth Method: $($mainModeSA.AuthenticationMethod)" -Type Info
@@ -5580,15 +5580,15 @@ function Invoke-TestIPsecConnectivity {
         }
         
         if ($quickModeSA) {
-            Write-Log "✓ Quick Mode SA found to $remoteHost" -Type Success
+            Write-Log "[OK] Quick Mode SA found to $remoteHost" -Type Success
             Write-Log "  Local: $($quickModeSA.LocalEndpoint)" -Type Info
             Write-Log "  Remote: $($quickModeSA.RemoteEndpoint)" -Type Info
             Write-Log "  Encapsulation: $($quickModeSA.EncapsulationMode)" -Type Info
             Write-Log "  Cipher: $($quickModeSA.CipherAlgorithm)" -Type Info
             Write-Log "" -NoFile
-            Write-Log "✓ IPsec encryption is ACTIVE to this host!" -Type Success
+            Write-Log "[OK] IPsec encryption is ACTIVE to this host!" -Type Success
         } else {
-            Write-Log "⚠ No Quick Mode SA found to this host" -Type Warning
+            Write-Log "[!] No Quick Mode SA found to this host" -Type Warning
             Write-Log "" -NoFile
             Write-Log "Possible reasons:" -Type Info
             Write-Log "  - Remote host doesn't have IPsec configured" -Type Info
@@ -5608,30 +5608,30 @@ function Invoke-TestIPsecConnectivity {
             # Try to find matching rule
             foreach ($rule in $rules) {
                 if ($rule.RemoteAddress -contains 'Any' -or $rule.RemoteAddress -contains $remoteHost) {
-                    Write-Log "  ✓ Rule '$($rule.DisplayName)' may apply" -Type Info
+                    Write-Log "  [OK] Rule '$($rule.DisplayName)' may apply" -Type Info
                     Write-Log "    Inbound: $($rule.InboundSecurity)" -Type Info
                     Write-Log "    Outbound: $($rule.OutboundSecurity)" -Type Info
                 }
             }
         } else {
-            Write-Log "⚠ No IPsec rules configured!" -Type Warning
+            Write-Log "[!] No IPsec rules configured!" -Type Warning
             Write-Log "  IPsec cannot work without rules" -Type Error
         }
         
         # Summary
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "CONNECTIVITY TEST SUMMARY" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         if ($quickModeSA) {
-            Write-Log "✓ SUCCESS: IPsec is encrypting traffic to $remoteHost" -Type Success
+            Write-Log "[OK] SUCCESS: IPsec is encrypting traffic to $remoteHost" -Type Success
         } elseif ($mainModeSA) {
-            Write-Log "⚠ PARTIAL: Main Mode established but no Quick Mode SA" -Type Warning
+            Write-Log "[!] PARTIAL: Main Mode established but no Quick Mode SA" -Type Warning
             Write-Log "  Check: Quick Mode crypto sets and IPsec rules" -Type Info
         } else {
-            Write-Log "✗ FAILURE: No IPsec encryption to $remoteHost" -Type Error
+            Write-Log "[X] FAILURE: No IPsec encryption to $remoteHost" -Type Error
             Write-Log "  Review IPsec Event Logs (Option 17) for details" -Type Info
         }
         
@@ -5655,9 +5655,9 @@ function Invoke-ViewIPsecEvents {
         - IPsec Quick Mode (Event IDs 4652-4656)
         - Authentication failures
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "IPSEC EVENT LOGS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -5764,9 +5764,9 @@ function Invoke-ViewCertificates {
         - Trust chain validation
         - Private key availability
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "MACHINE CERTIFICATE INFORMATION" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     try {
@@ -5801,22 +5801,22 @@ function Invoke-ViewCertificates {
                 Write-Log "  Has Private Key: $hasPrivateKey" -Type $(if ($hasPrivateKey) { 'Success' } else { 'Warning' })
                 
                 if ($expired) {
-                    Write-Log "  ✗ EXPIRED!" -Type Error
+                    Write-Log "  [X] EXPIRED!" -Type Error
                 } elseif ($expiringSoon) {
-                    Write-Log "  ⚠ Expires in $([math]::Round(($cert.NotAfter - (Get-Date)).TotalDays)) days" -Type Warning
+                    Write-Log "  [!] Expires in $([math]::Round(($cert.NotAfter - (Get-Date)).TotalDays)) days" -Type Warning
                 } else {
-                    Write-Log "  ✓ Valid for $([math]::Round(($cert.NotAfter - (Get-Date)).TotalDays)) days" -Type Success
+                    Write-Log "  [OK] Valid for $([math]::Round(($cert.NotAfter - (Get-Date)).TotalDays)) days" -Type Success
                 }
                 
                 # Check if suitable for IPsec
                 if ($hasPrivateKey) {
                     $enhancedKeyUsage = $cert.EnhancedKeyUsageList
                     if ($enhancedKeyUsage -match "IP security|1\.3\.6\.1\.5\.5\.7\.3\.5") {
-                        Write-Log "  ✓ Suitable for IPsec (IP Security EKU present)" -Type Success
+                        Write-Log "  [OK] Suitable for IPsec (IP Security EKU present)" -Type Success
                     } elseif ($enhancedKeyUsage -match "Client Authentication|1\.3\.6\.1\.5\.5\.7\.3\.2") {
-                        Write-Log "  ✓ Suitable for IPsec (Client Auth present)" -Type Success
+                        Write-Log "  [OK] Suitable for IPsec (Client Auth present)" -Type Success
                     } else {
-                        Write-Log "  ⚠ May not be suitable for IPsec (check Enhanced Key Usage)" -Type Warning
+                        Write-Log "  [!] May not be suitable for IPsec (check Enhanced Key Usage)" -Type Warning
                     }
                 }
                 
@@ -5841,7 +5841,7 @@ function Invoke-ViewCertificates {
             Write-Log "To open Certificate Manager: certlm.msc" -Type Info
             
         } else {
-            Write-Log "⚠ No certificates found in Local Machine\Personal store" -Type Warning
+            Write-Log "[!] No certificates found in Local Machine\Personal store" -Type Warning
             Write-Log "" -NoFile
             Write-Log "IPsec certificate authentication requires computer certificates!" -Type Warning
             Write-Log "" -NoFile
@@ -5870,9 +5870,9 @@ function Invoke-PreviewChanges {
         - What would be removed
         - No actual changes are made to the system
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "PREVIEW CHANGES (WHATIF MODE)" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     # Check if configuration is loaded
@@ -5908,9 +5908,9 @@ function Invoke-PreviewChanges {
             Write-Log "Warning: Could not retrieve some current settings: $_" -Type Warning
         }
         
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "CURRENT CONFIGURATION" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         Write-Log "  IPsec Rules: $($currentRules.Count)" -Type Info
         Write-Log "  Phase 1 Auth Sets: $($currentAuthSets.Count)" -Type Info
@@ -5919,9 +5919,9 @@ function Invoke-PreviewChanges {
         Write-Log "  Main Mode Rules: $($currentMMRules.Count)" -Type Info
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "PROPOSED CONFIGURATION FROM XML" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Count proposed items from XML
@@ -5949,9 +5949,9 @@ function Invoke-PreviewChanges {
         Write-Log "  IPsec Rules: $proposedRulesCount" -Type Info
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "CHANGE ANALYSIS" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Analyze Phase 1 Authentication
@@ -6039,7 +6039,7 @@ function Invoke-PreviewChanges {
                     Write-Log "  + ADD: $ruleName" -Type Success
                     Write-Log "    Inbound: $($ruleNode.InboundSecurity)" -Type Info
                     Write-Log "    Outbound: $($ruleNode.OutboundSecurity)" -Type Info
-                    Write-Log "    Endpoints: $($ruleNode.LocalAddress) ↔ $($ruleNode.RemoteAddress)" -Type Info
+                    Write-Log "    Endpoints: $($ruleNode.LocalAddress) ? $($ruleNode.RemoteAddress)" -Type Info
                 }
             }
         } else {
@@ -6069,15 +6069,15 @@ function Invoke-PreviewChanges {
                 Write-Log "    - $($extraRule.DisplayName)" -Type Info
             }
             Write-Log "" -NoFile
-            Write-Log "  ℹ Note: These rules would remain unless you use 'Remove All IPsec Rules' first" -Type Info
+            Write-Log "  [i] Note: These rules would remain unless you use 'Remove All IPsec Rules' first" -Type Info
         } else {
             Write-Log "  (All current rules are in XML)" -Type Success
         }
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "WHATIF SUMMARY" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         # Calculate totals
@@ -6111,7 +6111,7 @@ function Invoke-PreviewChanges {
         }
         
         if ($totalChanges -eq 0) {
-            Write-Log "✓ No changes would be made" -Type Success
+            Write-Log "[OK] No changes would be made" -Type Success
             Write-Log "  Current configuration matches XML" -Type Info
         } else {
             Write-Log "Total changes that would be made: $totalChanges" -Type Warning
@@ -6123,9 +6123,9 @@ function Invoke-PreviewChanges {
         }
         
         Write-Log "" -NoFile
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "TO APPLY THESE CHANGES:" -Type Title
-        Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+        Write-Log "===========================================================" -Type Header
         Write-Log "" -NoFile
         
         if ($Script:EnvironmentMode -eq 'Enterprise') {
@@ -6147,7 +6147,7 @@ function Invoke-PreviewChanges {
         Write-Log "  5. Test connectivity (Option 17)" -Type Info
         
         Write-Log "" -NoFile
-        Write-Log "⚠ REMEMBER: This was a preview only - NO changes were made!" -Type Warning
+        Write-Log "[!] REMEMBER: This was a preview only - NO changes were made!" -Type Warning
         
     } catch {
         Write-Log "" -NoFile
@@ -6163,9 +6163,9 @@ function Invoke-ExportADIPsec {
     .SYNOPSIS
         Wrapper for Export-ADIPsecConfiguration with user prompts.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "EXPORT IPSEC FROM ACTIVE DIRECTORY" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     Write-Log "This function exports IPsec configuration from the AD IP Security container" -Type Info
@@ -6235,12 +6235,12 @@ function Invoke-ImportADIPsec {
     .SYNOPSIS
         Wrapper for Import-ADIPsecConfiguration with user prompts.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "IMPORT IPSEC TO ACTIVE DIRECTORY" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
-    Write-Log "⚠ WARNING: This operation is currently in PREVIEW mode" -Type Warning
+    Write-Log "[!] WARNING: This operation is currently in PREVIEW mode" -Type Warning
     Write-Log "" -NoFile
     Write-Log "This function reads exported IPsec configuration and attempts to" -Type Info
     Write-Log "recreate the objects in the target domain's IP Security container." -Type Info
@@ -6295,9 +6295,9 @@ function Invoke-CompareADIPsec {
     .SYNOPSIS
         Wrapper for Compare-ADIPsecConfiguration with user prompts.
     #>
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "COMPARE IPSEC BETWEEN DOMAINS" -Type Title
-    Write-Log "═══════════════════════════════════════════════════════════" -Type Header
+    Write-Log "===========================================================" -Type Header
     Write-Log "" -NoFile
     
     Write-Log "This function compares IPsec objects in the IP Security containers" -Type Info
@@ -6392,3 +6392,4 @@ Write-Log "Log file saved to: $Script:LogFilePath" -Type Info
 Write-Log "" -NoFile
 
 #endregion
+

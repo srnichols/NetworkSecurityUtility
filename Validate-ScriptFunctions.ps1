@@ -29,16 +29,16 @@ try {
     $null = [System.Management.Automation.PSParser]::Tokenize($scriptContent, [ref]$errors)
     
     if ($errors.Count -eq 0) {
-        Write-Host "  ✓ PASSED: No syntax errors found" -ForegroundColor Green
+        Write-Host "  [OK] PASSED: No syntax errors found" -ForegroundColor Green
     } else {
-        Write-Host "  ✗ FAILED: $($errors.Count) syntax error(s)" -ForegroundColor Red
+        Write-Host "  [X] FAILED: $($errors.Count) syntax error(s)" -ForegroundColor Red
         foreach ($err in $errors) {
             Write-Host "    Line $($err.Token.StartLine): $($err.Message)" -ForegroundColor Yellow
         }
         exit 1
     }
 } catch {
-    Write-Host "  ✗ FAILED: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "  [X] FAILED: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
@@ -50,7 +50,7 @@ $functionNames = $functions | ForEach-Object { $_.Groups[1].Value } | Sort-Objec
 
 Write-Host "  Found $($functionNames.Count) unique functions" -ForegroundColor Cyan
 foreach ($funcName in $functionNames) {
-    Write-Host "    • $funcName" -ForegroundColor Gray
+    Write-Host "    * $funcName" -ForegroundColor Gray
 }
 
 # Test 3: Load Script in Isolated Scope
@@ -103,7 +103,7 @@ try {
     }
     
     if ($powershell.HadErrors) {
-        Write-Host "  ✗ FAILED: Errors during script load" -ForegroundColor Red
+        Write-Host "  [X] FAILED: Errors during script load" -ForegroundColor Red
         foreach ($err in $powershell.Streams.Error) {
             Write-Host "    $($err.Exception.Message)" -ForegroundColor Yellow
         }
@@ -111,7 +111,7 @@ try {
         exit 1
     }
     
-    Write-Host "  ✓ PASSED: Script loaded without errors" -ForegroundColor Green
+    Write-Host "  [OK] PASSED: Script loaded without errors" -ForegroundColor Green
     
     # Test 4: Verify Functions are Callable
     Write-Host "`n[TEST 4] Verifying Functions are Callable..." -ForegroundColor Yellow
@@ -129,11 +129,11 @@ try {
             $cmd = $powershell2.Invoke()
             if ($cmd) {
                 $testableCount++
-                Write-Host "    ✓ $funcName" -ForegroundColor Green
+                Write-Host "    [OK] $funcName" -ForegroundColor Green
                 $passedCount++
             }
         } catch {
-            Write-Host "    ✗ $funcName - Not found or not callable" -ForegroundColor Red
+            Write-Host "    [X] $funcName - Not found or not callable" -ForegroundColor Red
         }
         
         $powershell2.Dispose()
@@ -145,7 +145,7 @@ try {
     Write-Host "  Results: $passedCount/$testableCount functions verified" -ForegroundColor Cyan
     
 } catch {
-    Write-Host "  ✗ FAILED: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "  [X] FAILED: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
@@ -168,10 +168,10 @@ $criticalFunctions = @{
 $paramChecksPassed = 0
 foreach ($funcName in $criticalFunctions.Keys) {
     if ($functionNames -contains $funcName) {
-        Write-Host "    ✓ $funcName exists" -ForegroundColor Green
+        Write-Host "    [OK] $funcName exists" -ForegroundColor Green
         $paramChecksPassed++
     } else {
-        Write-Host "    ✗ $funcName NOT FOUND" -ForegroundColor Red
+        Write-Host "    [X] $funcName NOT FOUND" -ForegroundColor Red
     }
 }
 
@@ -192,9 +192,9 @@ $checks = @{
 
 foreach ($check in $checks.Keys) {
     if ($checks[$check]) {
-        Write-Host "    ✓ $check" -ForegroundColor Green
+        Write-Host "    [OK] $check" -ForegroundColor Green
     } else {
-        Write-Host "    ✗ $check" -ForegroundColor Red
+        Write-Host "    [X] $check" -ForegroundColor Red
     }
 }
 
@@ -216,13 +216,13 @@ if ($todoCount -gt 0) {
 
 # Check for Write-Host (should use Write-Log instead)
 $writeHostCount = ([regex]::Matches($scriptContent, 'Write-Host', [System.Text.RegularExpressions.RegexOptions]::None)).Count
-Write-Host "    ℹ Write-Host usage: $writeHostCount occurrence(s)" -ForegroundColor Cyan
+Write-Host "    [i] Write-Host usage: $writeHostCount occurrence(s)" -ForegroundColor Cyan
 
 if ($issues.Count -eq 0) {
-    Write-Host "    ✓ No critical issues found" -ForegroundColor Green
+    Write-Host "    [OK] No critical issues found" -ForegroundColor Green
 } else {
     foreach ($issue in $issues) {
-        Write-Host "    ⚠ $issue" -ForegroundColor Yellow
+        Write-Host "    [!] $issue" -ForegroundColor Yellow
     }
 }
 
@@ -234,18 +234,18 @@ Write-Host "========================================" -ForegroundColor Cyan
 $summary = @"
 
 Script Information:
-  • File: Network-Security-Utility.ps1
-  • Size: $([math]::Round((Get-Item $ScriptPath).Length / 1KB, 2)) KB
-  • Lines: $($scriptContent.Split("`n").Count)
-  • Functions: $($functionNames.Count)
+  * File: Network-Security-Utility.ps1
+  * Size: $([math]::Round((Get-Item $ScriptPath).Length / 1KB, 2)) KB
+  * Lines: $($scriptContent.Split("`n").Count)
+  * Functions: $($functionNames.Count)
 
 Validation Results:
-  ✓ Syntax Validation: PASSED
-  ✓ Function Definitions: $($functionNames.Count) found
-  ✓ Critical Functions: $paramChecksPassed/$($criticalFunctions.Count) verified
-  ✓ Script Structure: Valid
+  [OK] Syntax Validation: PASSED
+  [OK] Function Definitions: $($functionNames.Count) found
+  [OK] Critical Functions: $paramChecksPassed/$($criticalFunctions.Count) verified
+  [OK] Script Structure: Valid
 
-Deployment Status: READY ✅
+Deployment Status: READY ?
 
 "@
 
@@ -255,3 +255,4 @@ Write-Host "`nThe script is validated and ready for client deployment!" -Foregro
 Write-Host "All functions are properly defined and callable.`n" -ForegroundColor Green
 
 exit 0
+
