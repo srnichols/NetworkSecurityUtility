@@ -2,7 +2,7 @@
 .SYNOPSIS
     Standalone IPsec Configuration Script for Windows Server 2016+
     
-    Created for ThyssenKrupp Steel
+    Created for Contoso
  
 .DESCRIPTION
     This script configures IPsec rules directly on the local server without
@@ -60,11 +60,11 @@
  
 .EXAMPLE
     Apply only a specific rule:
-    PS> .\Configure-LocalIPsec.ps1 -ConfigFile ".\IPsecConfig.xml" -RuleName "TKSteel-HTTPS-Secure"
+    PS> .\Configure-LocalIPsec.ps1 -ConfigFile ".\IPsecConfig.xml" -RuleName "Contoso-HTTPS-Secure"
  
 .NOTES
     Author: Microsoft Consulting Services
-    Adapted for ThyssenKrupp Steel
+    Adapted for Contoso
     Version: 1.0
     Date: November 3, 2025
     

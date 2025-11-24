@@ -39,7 +39,7 @@
     
 .EXAMPLE
     Specify configuration file:
-    PS> .\IPsec-Configuration-Utility.ps1 -ConfigFile ".\LocalIPsecConfig-ThyssenKrupp.xml"
+    PS> .\IPsec-Configuration-Utility.ps1 -ConfigFile ".\LocalIPsecConfig-Contoso.xml"
     
 .EXAMPLE
     Force local mode:
@@ -47,7 +47,7 @@
     
 .NOTES
     Author: Microsoft Consulting Services
-    Client: ThyssenKrupp Steel / DXC
+    Client: Contoso
     Version: 1.0
     Date: November 3, 2025
     
@@ -108,7 +108,7 @@ Set-StrictMode -Version Latest
 # Script version and metadata
 $Script:Version = "1.0"
 $Script:ScriptName = "IPsec Configuration Utility"
-$Script:ClientName = "ThyssenKrupp Steel"
+$Script:ClientName = "Contoso"
 
 # Environment detection results
 $Script:EnvironmentMode = $null  # Will be 'Local' or 'Enterprise'
