@@ -34,9 +34,9 @@
     Optional: Specific rule name to apply. If not specified, all rules are applied.
     Use this to apply only one rule from the configuration file.
  
-.PARAMETER Confirm
-    If true, confirmation is required to execute the script.
-    Set to $false for automation/silent execution.
+.PARAMETER SkipConfirmation
+    If specified, skips confirmation prompts.
+    Use for automation/silent execution.
  
 .PARAMETER RemoveExisting
     If true, removes all existing IPsec rules before applying new ones.
@@ -56,7 +56,7 @@
  
 .EXAMPLE
     Remove existing rules and apply new ones without confirmation:
-    PS> .\Configure-LocalIPsec.ps1 -ConfigFile ".\IPsecConfig.xml" -RemoveExisting -Confirm:$false
+    PS> .\Configure-LocalIPsec.ps1 -ConfigFile ".\IPsecConfig.xml" -RemoveExisting -SkipConfirmation
  
 .EXAMPLE
     Apply only a specific rule:
@@ -92,10 +92,10 @@ param (
     [String]$RuleName = $null,
  
     [Parameter(Mandatory=$false)]
-    [Switch]$Confirm = $true,
+    [Switch]$SkipConfirmation,
  
     [Parameter(Mandatory=$false)]
-    [Switch]$RemoveExisting = $false
+    [Switch]$RemoveExisting
 )
 
 Set-StrictMode -Version Latest
