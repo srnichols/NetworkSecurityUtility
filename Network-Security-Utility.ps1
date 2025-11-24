@@ -109,6 +109,7 @@ Set-StrictMode -Version Latest
 $Script:Version = "1.0"
 $Script:ScriptName = "IPsec Configuration Utility"
 $Script:ClientName = "Contoso"
+$Script:ScriptDirectory = $PSScriptRoot
 
 # Environment detection results
 $Script:EnvironmentMode = $null  # Will be 'Local' or 'Enterprise'
