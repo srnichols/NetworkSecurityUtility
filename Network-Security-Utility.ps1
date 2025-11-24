@@ -4712,6 +4712,12 @@ function Invoke-ExportConfiguration {
         # Get IPsec rules
         $ipsecRules = Get-NetIPsecRule -PolicyStore ActiveStore -ErrorAction Stop
         
+        # Handle null results (convert to empty arrays)
+        if ($null -eq $ipsecRules) { $ipsecRules = @() }
+        if ($null -eq $authSets) { $authSets = @() }
+        if ($null -eq $mmCrypto) { $mmCrypto = @() }
+        if ($null -eq $qmCrypto) { $qmCrypto = @() }
+        
         Write-Log "Found $($ipsecRules.Count) IPsec rules" -Type Info
         Write-Log "Found $($authSets.Count) Phase 1 auth sets" -Type Info
         Write-Log "Found $($mmCrypto.Count) Main Mode crypto sets" -Type Info
@@ -6442,7 +6448,7 @@ while ($running) {
         Show-MainMenu
         
         # Get max menu choice based on mode
-        $maxChoice = if ($Script:EnvironmentMode -eq 'Enterprise') { 20 } else { 20 }
+        $maxChoice = if ($Script:EnvironmentMode -eq 'Enterprise') { 23 } else { 20 }
         
         $choice = Get-MenuChoice -MaxChoice $maxChoice
         
