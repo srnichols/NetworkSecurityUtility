@@ -101,10 +101,10 @@ The Network Security Utility is a comprehensive PowerShell-based solution for ma
 .\Network-Security-Utility.ps1
 
 # 2. Select: 1 (ENTER LOCAL MODE)
-# 3. Select: 3 (Load Configuration from XML)
+# 3. Select: 2 (Load Configuration from XML)
 # 4. Select: 14 (Backup Current Settings) ⚠️ CRITICAL
-# 5. Select: 8 (Apply Local IPsec Configuration)
-# 6. Select: 4 (View IPsec Statistics & Status)
+# 5. Select: 11 (Apply Complete Configuration - All Steps)
+# 6. Select: 3 (View IPsec Statistics & Status)
 ```
 
 ### Scenario 2: Deploy Domain-Wide (ENTERPRISE Mode)
@@ -127,13 +127,13 @@ The Network Security Utility is a comprehensive PowerShell-based solution for ma
 # On SOURCE domain controller:
 .\Network-Security-Utility.ps1
 # Select: 2 (ENTERPRISE MODE)
-# Select: 21 (Export AD IPsec Configuration to XML)
+# Select: 21 (Export IPsec from AD IP Security Container)
 # Save exported XML file
 
 # On TARGET domain controller:
 .\Network-Security-Utility.ps1
 # Select: 2 (ENTERPRISE MODE)
-# Select: 22 (Import AD IPsec Configuration - Preview)
+# Select: 22 (Import IPsec to AD IP Security Container)
 # Review planned changes
 # Select: 23 (Compare IPsec Between Domains)
 ```
@@ -144,31 +144,56 @@ See **AD-IPsec-Migration-Guide.md** for complete migration workflows.
 
 ## 📖 Menu Structure
 
-### LOCAL Mode Options (0-19)
+### LOCAL Mode Options (0-20)
+
+**INFORMATION & TESTING**
+- `1` - View Current IPsec Configuration
+- `2` - Load/Test XML Configuration File
+- `3` - View IPsec Statistics and Status
+- `4` - Show Loaded Configuration
+
+**LOCAL CONFIGURATION**
+- `5` - Remove All IPsec Rules
+- `6` - Configure Windows Firewall
+- `7` - Create Phase 1 Authentication
+- `8` - Create Main Mode Crypto Sets
+- `9` - Create Quick Mode Crypto Sets
+- `10` - Apply IPsec Rules
+- `11` - Apply Complete Configuration (All Steps)
+
+**UTILITIES**
+- `12` - Export Current Configuration to XML
+- `13` - Generate HTML Report
+- `14` - Backup Current Settings ⚠️
+- `15` - Restore from Backup ⚠️
+- `16` - View Firewall Logs
+
+**TROUBLESHOOTING**
+- `17` - Test IPsec Connectivity to Remote Host
+- `18` - View IPsec Event Logs
+- `19` - View Certificate Information
+
+**ANALYSIS**
+- `20` - Preview Changes (WhatIf Mode)
+
+**EXIT**
+- `0` - Exit
+
+### ENTERPRISE Mode Options (0-23)
 
 **INFORMATION & TESTING**
 - `1` - View Current Local IPsec Configuration
 - `2` - View GPO IPsec Configuration
 - `3` - Load/Test XML Configuration File
-- `4` - View IPsec Statistics & Status
+- `4` - View IPsec Statistics and Status
 - `5` - Show Loaded Configuration
 
-**LOCAL CONFIGURATION**
+**LOCAL CONFIGURATION (This Server Only)**
 - `6` - Remove All Local IPsec Rules
 - `7` - Configure Local Windows Firewall
 - `8` - Apply Local IPsec Configuration
 
-**UTILITIES**
-- `14` - Backup Current Settings ⚠️
-- `15` - Restore from Backup ⚠️
-- `16` - Generate HTML Report
-- `19` - View Firewall Logs
-
-### ENTERPRISE Mode Options (0-23)
-
-Includes all LOCAL mode options plus:
-
-**DOMAIN CONFIGURATION (GPO)**
+**DOMAIN CONFIGURATION (GPO/Active Directory)**
 - `9` - List Existing IPsec GPOs
 - `10` - Create/Update IPsec GPOs
 - `11` - Link GPOs to OUs
@@ -176,13 +201,23 @@ Includes all LOCAL mode options plus:
 - `13` - Apply Complete GPO Configuration
 - `14` - Test GPO Replication Status
 
+**AD IPSEC MIGRATION (Domain-to-Domain)**
+- `21` - Export IPsec from AD IP Security Container
+- `22` - Import IPsec to AD IP Security Container
+- `23` - Compare IPsec Between Domains
+
+**UTILITIES**
+- `15` - Export Current Configuration to XML
+- `16` - Generate HTML Report
+- `17` - Backup Current Settings ⚠️
+- `18` - Restore from Backup ⚠️
+- `19` - View Firewall Logs
+
 **ANALYSIS**
 - `20` - Preview Changes (WhatIf Mode)
 
-**AD IPSEC MIGRATION (Domain-to-Domain)**
-- `21` - Export AD IPsec Configuration to XML
-- `22` - Import AD IPsec Configuration (Preview)
-- `23` - Compare IPsec Between Domains
+**EXIT**
+- `0` - Exit
 
 ---
 
@@ -318,7 +353,7 @@ Deploy only IPsec OR only Firewall settings:
 ### Automated HTML Reporting
 
 ```powershell
-# Menu Option 16: Generate HTML Report
+# Menu Option 13 (LOCAL) or 16 (ENTERPRISE): Generate HTML Report
 # Creates detailed report with:
 # - Current IPsec policies
 # - Active Security Associations
