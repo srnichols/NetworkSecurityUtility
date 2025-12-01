@@ -1541,7 +1541,7 @@ function Import-ADIPsecConfiguration {
                 Write-Log "WARNING: IP Security container does not exist in target domain" -Type Warning
                 Write-Log "Container: $targetIPSecDN" -Type Info
                 
-                if (-not $WhatIf) {
+                if (-not $WhatIfPreference) {
                     $create = Get-UserConfirmation -Message "Do you want to create the IP Security container?"
                     if ($create) {
                         # Note: Creating the container requires specific attributes
@@ -1578,7 +1578,7 @@ function Import-ADIPsecConfiguration {
         Write-Log "  - ISAKMP Policies: $isakmpCount" -Type Info
         Write-Log "" -NoFile
         
-        if ($WhatIf) {
+        if ($WhatIfPreference) {
             Write-Log "WhatIf mode - no changes will be made" -Type Warning
             Write-Log "" -NoFile
             return $true
