@@ -1473,8 +1473,6 @@ function Import-ADIPsecConfiguration {
         FQDN of the target domain where configuration will be imported.
     .PARAMETER Credential
         PSCredential object for accessing the target domain (optional).
-    .PARAMETER WhatIf
-        Preview changes without actually creating objects.
     #>
     [CmdletBinding(SupportsShouldProcess=$true)]
     param (
@@ -1485,10 +1483,7 @@ function Import-ADIPsecConfiguration {
         [string]$TargetDomain,
         
         [Parameter(Mandatory=$false)]
-        [System.Management.Automation.PSCredential]$Credential,
-        
-        [Parameter(Mandatory=$false)]
-        [switch]$WhatIf
+        [System.Management.Automation.PSCredential]$Credential
     )
     
     Write-Log "===========================================================" -Type Header
